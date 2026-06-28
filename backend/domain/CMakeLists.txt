@@ -1,2 +1,4 @@
-add_library(domain INTERFACE)
-target_include_directories(domain INTERFACE include)
+add_library(domain
+    src/auth/login_request.cpp
+)
+target_include_directories(domain PUBLIC include)
