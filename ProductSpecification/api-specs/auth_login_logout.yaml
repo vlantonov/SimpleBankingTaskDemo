@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: User Authentication
+  version: 1.0.0
+
+paths:
+  /api/v1/login:
+    post:
+      summary: Authenticate user and obtain session token
+      operationId: login
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Wrong PIN for existing user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: User already has an active session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Validation error (empty user or pin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/logout:
+    post:
+      summary: Dispose the current user session
+      operationId: logout
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Logout successful
+        '401':
+          description: No active session found for the provided token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - user
+        - pin
+      properties:
+        user:
+          type: string
+          description: Username (non-empty, no whitespace)
+          example: ola
+        pin:
+          type: string
+          description: User PIN (matched exactly, case-sensitive)
+          example: "123"
+
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Welcome message
+          example: Welcome, ola
+        token:
+          type: string
+          description: Session token for subsequent authenticated requests
+          example: a1b2c3d4e5f6...
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Wrong PIN
