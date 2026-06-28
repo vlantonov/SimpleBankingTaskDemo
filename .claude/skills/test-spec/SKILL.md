@@ -1,0 +1,60 @@
+---
+name: test-spec
+description: Generate BDD test specifications for story in 5 categories (API, Load, Infrastructure, Security, Integration). Use when user wants to create test cases or mentions /test-spec command.
+---
+
+# Generate Test Specifications
+
+Generate BDD-style test specifications for a story in 5 categories. Each category produces two files: **main** (critical tests) and **extended** (nice-to-have tests).
+
+## Usage
+```
+/test-spec "Story name"
+/test-spec 5              # By MVP story number
+/test-spec                # Interactive selection
+```
+
+## Workflow
+
+### Phase 1: Context & Story Selection
+
+Read before generating: `ProductSpecification/BriefProductDescription.md`, `ProductSpecification/stories.md`, `ProductSpecification/ExpectedLoad.md`, story folder (`stories/*/`): `*.md`, `endpoints.md`, `interview.md`.
+
+Parse input: by name (`"Login/Logout"`), by number (`5`), or interactive (list and ask).
+
+If `interview.md` exists, extract:
+- Business rules and constraints → map to API test scenarios
+- Explicit edge cases (column transitions, task ordering, concurrent edits) → map to extended tests
+- External API error modes → map to integration tests
+- Rate limits and performance constraints → map to load tests when they exercise the project's declared **Load Challenge Profile** (read `ExpectedLoad.md` to identify it); skip constraints that don't match the project's profile
+
+**Prerequisite analysis** (mandatory): Read the story's Prerequisites section and Validation Rules table. For each prerequisite, generate guard scenarios in API tests following the Prerequisite Guard Checklist in `test-spec-format.md`.
+
+### Phase 2: Generate Test Files
+
+Load `.claude/templates/spec/test-spec-format.md` for category formats, ordering principles, and BDD rules.
+
+Create files in `ProductSpecification/stories/NN-story-name/tests/`:
+
+**Main files (critical ~25-30 total tests):**
+- `01_API_Tests.md`, `03_Load_Tests.md`
+- `04_Infrastructure_Tests.md`, `05_Security_Tests.md`, `06_Integration_Tests.md`
+
+**Extended files in `extended/` subfolder (nice-to-have edge cases):**
+- `extended/01_API_Tests_Extended.md`, `extended/03_Load_Tests_Extended.md`, `extended/04_Infrastructure_Tests_Extended.md`, `extended/05_Security_Tests_Extended.md`, `extended/06_Integration_Tests_Extended.md`
+
+Add this header to extended files:
+```markdown
+> These are additional edge case tests. Implement after core tests pass.
+```
+
+### Phase 3: Summary
+
+Report: folder path, files created, test counts per file.
+
+## Rules
+
+- English, Gherkin in Markdown, DSL only (no technical details in steps)
+- Main files: critical path (~25-30 total), Extended files: edge cases
+- **Load tests**: profile-driven. Read the **Load Challenge Profile** section in `ExpectedLoad.md` to identify this project's dominant load risk (Volume / Throughput / Latency / Big-data). Generate 1-3 scenarios per story that exercise the declared profile, using the matching assertion class and out-of-scope list from the catalog in `test-spec-format.md`. Skip the file entirely (set `Load = n/a`) for stories with no operation exercising the project's profile — one-shot per-user actions bounded by user count are the common case (login, registration, password reset, link API key)
+- **Security**: generate stack-aware scenarios only — see relevance filtering and checklist in `test-spec-format.md`. Skip technologies not in the stack (NoSQL, LDAP, XXE). Skip cross-cutting concerns tested globally (security headers, CORS, HTTPS). Include IDOR for resource-by-ID endpoints, JWT/session security for auth stories, input validation for entity fields. Merge related scenarios (e.g., one SQL injection test covering all fields). Target 6-10 focused scenarios per story.
