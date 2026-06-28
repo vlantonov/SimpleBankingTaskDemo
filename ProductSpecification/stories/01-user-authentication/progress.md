@@ -10,8 +10,8 @@
 
 ### 1.1 Login with empty username is rejected
 - [x] red-acceptance
-- [~] design
-- [ ] red-usecase
+- [x] design
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
