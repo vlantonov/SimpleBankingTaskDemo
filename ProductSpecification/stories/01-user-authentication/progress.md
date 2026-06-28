@@ -9,7 +9,7 @@
 ## Backend Scenarios (01_API_Tests.md)
 
 ### 1.1 Login with empty username is rejected
-- [ ] red-acceptance
+- [x] red-acceptance
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase
