@@ -2,3 +2,15 @@
 [17:32:55] [red-agent] PREDICT: HTTP 400 expected, 404 returned by stub (no /api/v1/login route)
 [17:33:42] [red-agent] RUN: FAILED - status_code=404, expected 400 (matches prediction)
 [17:34:06] [red-agent] DONE: acceptance/tests/backend/auth/auth_acceptance_test.cpp created
+[17:38:16] [test-review-agent] START: auth_acceptance_test.cpp
+[17:38:16] [test-review-agent] SCAN: VIOLATION - LoginResponse has 4 fields; only status_code was asserted. Added error, token, message assertions.
+[17:38:16] [test-review-agent] RUN: FAILED (red state preserved) - status=404 not 400; error='Not Found' not 'Validation error'
+[17:38:16] [test-review-agent] DONE
+[17:44:01] [refactor-agent] START: acceptance layer scaffolding
+[17:46:58] [refactor-agent] SCAN: VIOLATIONS - B6 serialization outside LoginRequest; B6 deserialization outside LoginResponse; A1 login()=25 lines; A2 nesting depth 3; A8 pass-through req local; A11 unused make_client()
+[17:46:58] [refactor-agent] FIX: Move to_json_string() to LoginRequest; remove inline JSON body construction in ApplicationClient
+[17:46:58] [refactor-agent] FIX: Move parse()/connection_failed()/try_parse_fields()/apply_json_fields() to LoginResponse; simplify login() to 3 lines; remove nlohmann include from ApplicationClient
+[17:46:58] [refactor-agent] FIX: Inline pass-through 'req' local in AuthStatements (A8)
+[17:46:58] [refactor-agent] FIX: Remove unused make_client() from BackendTestFixture; remove httplib include (A11)
+[17:46:58] [refactor-agent] RUN: FAILED as expected - status=404 vs 400; error='Not Found' vs 'Validation error'; 0 passed, 1 failed
+[17:46:58] [refactor-agent] DONE

@@ -1,8 +1,7 @@
 #pragma once
 #include <gtest/gtest.h>
-#include <httplib.h>
-#include <string>
 #include <cstdlib>
+#include <string>
 
 class BackendTestFixture : public ::testing::Test {
 protected:
@@ -12,9 +11,5 @@ protected:
     void SetUp() override {
         const char* port_env = std::getenv("BACKEND_PORT");
         backend_port_ = port_env ? std::atoi(port_env) : BACKEND_PORT_DEFAULT;
-    }
-
-    httplib::Client make_client() const {
-        return httplib::Client(backend_host_, backend_port_);
     }
 };

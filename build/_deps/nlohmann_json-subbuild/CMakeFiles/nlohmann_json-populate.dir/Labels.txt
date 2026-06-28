@@ -1,0 +1,14 @@
+# Target labels
+ nlohmann_json-populate
+# Source files and their labels
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/CMakeFiles/nlohmann_json-populate
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/CMakeFiles/nlohmann_json-populate.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/CMakeFiles/nlohmann_json-populate-complete.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-build.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-configure.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-download.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-install.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-mkdir.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-patch.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-test.rule
+/home/vladiant/Workplace/SimpleBankingTaskDemo/build/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-update.rule
