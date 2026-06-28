@@ -3,9 +3,11 @@
 namespace domain {
 
 LoginRequest::LoginRequest(std::string username, std::string pin)
-    : username(std::move(username))
-    , pin(std::move(pin)) {
-    throw std::logic_error("Not implemented");
+    : username_(std::move(username))
+    , pin_(std::move(pin)) {
+    if (username_.empty() || pin_.empty()) {
+        throw ValidationException("Validation error");
+    }
 }
 
 }

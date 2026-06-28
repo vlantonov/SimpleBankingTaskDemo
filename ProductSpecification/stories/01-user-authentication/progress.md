@@ -12,8 +12,8 @@
 - [x] red-acceptance
 - [x] design
 - [x] red-usecase
-- [~] green-usecase
-- [ ] adapters-discovery
+- [x] green-usecase
+- [~] adapters-discovery
 - [ ] green-acceptance
 
 ### 1.2 Login with empty PIN is rejected

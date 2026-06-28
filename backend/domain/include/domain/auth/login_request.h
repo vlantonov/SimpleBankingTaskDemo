@@ -5,8 +5,8 @@
 namespace domain {
 
 struct LoginRequest {
-    std::string username;
-    std::string pin;
+    const std::string username_;
+    const std::string pin_;
 
     LoginRequest(std::string username, std::string pin);
 };
