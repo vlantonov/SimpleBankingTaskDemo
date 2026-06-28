@@ -4,4 +4,170 @@
 - [x] interview
 - [x] story
 - [x] api-spec
-- [~] test-spec
+- [x] test-spec
+
+## Backend Scenarios (01_API_Tests.md)
+
+### 1.1 Login with empty username is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 1.2 Login with empty PIN is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 2.1 First login creates the user and opens a session
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 2.2 First login appends USER_CREATED and LOGIN events to the log
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 3.1 Returning user with correct PIN receives a welcome message and new token
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 3.2 Returning user with wrong PIN is rejected and no session is created
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 4.1 Second login while a session is already active is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 5.1 Logout with a valid session token destroys the session
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 5.2 Logout without a session token is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### 5.3 Logout with an invalid session token is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+## Security Scenarios (05_Security_Tests.md)
+
+### S1.1 Repeated failed login attempts are rate-limited
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### S2.1 Session token is not reusable after logout
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### S2.2 Session token is sufficiently random
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### S2.3 An arbitrary token cannot access a protected endpoint
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### S3.1 Excessively long username is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### S3.2 Excessively long PIN is rejected
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### S4.1 PIN is not echoed in any response body or log
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+## Infrastructure Scenarios (04_Infrastructure_Tests.md)
+
+### I1.1 Login fails gracefully when the log file cannot be written
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### I1.2 Service recovers and login succeeds after log storage is restored
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
+
+### I2.1 Login fails gracefully when user data cannot be read
+- [ ] red-acceptance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
