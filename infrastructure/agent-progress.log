@@ -1,0 +1,4 @@
+[17:28:55] [red-agent] START: Scenario 1.1 Login with empty username is rejected
+[17:32:55] [red-agent] PREDICT: HTTP 400 expected, 404 returned by stub (no /api/v1/login route)
+[17:33:42] [red-agent] RUN: FAILED - status_code=404, expected 400 (matches prediction)
+[17:34:06] [red-agent] DONE: acceptance/tests/backend/auth/auth_acceptance_test.cpp created
