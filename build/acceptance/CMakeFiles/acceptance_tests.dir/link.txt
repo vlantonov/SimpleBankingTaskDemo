@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/acceptance_tests.dir/tests/backend/auth/auth_acceptance_test.cpp.o -o acceptance_tests  ../lib/libgtest_main.a /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so ../lib/libgtest.a 
