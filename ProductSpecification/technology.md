@@ -1,7 +1,7 @@
 # Technology Profile
 
 tech-profile:
-  backend: go-stdlib
+  backend: cpp-cmake
 
 <!--
 Available backend profiles for microservices:
