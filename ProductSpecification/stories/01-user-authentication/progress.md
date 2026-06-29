@@ -16,8 +16,8 @@
 - [x] adapters-discovery (http)
 - [x] red-adapter http
 - [x] green-adapter http
-- [~] red-adapter http (coverage: malformed JSON body → parse_error uncaught in LoginController)
-- [ ] green-adapter http (coverage: malformed JSON body → parse_error uncaught in LoginController)
+- [x] red-adapter http (coverage: malformed JSON body → parse_error uncaught in LoginController)
+- [~] green-adapter http (coverage: malformed JSON body → parse_error uncaught in LoginController)
 - [ ] green-acceptance
 
 ### 1.2 Login with empty PIN is rejected
