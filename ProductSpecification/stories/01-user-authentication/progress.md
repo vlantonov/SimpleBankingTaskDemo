@@ -27,8 +27,10 @@
 - [x] design
 - [S] red-usecase (capability exists: LoginRequest rejects empty pin in domain; no usecase production change)
 - [S] green-usecase (no implementation needed in usecase layer for empty-pin validation)
-- [~] adapters-discovery
-- [ ] green-acceptance
+- [x] adapters-discovery
+- [S] red-adapter http (no new http adapter behavior: controller already constructs LoginRequest with pin and delegates to mapped exception handler)
+- [S] green-adapter http (no adapter implementation changes required for empty-pin validation path)
+- [~] green-acceptance
 
 ### 2.1 First login creates the user and opens a session
 - [ ] red-acceptance
