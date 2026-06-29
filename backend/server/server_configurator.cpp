@@ -21,7 +21,7 @@ public:
 class TokenSessionPort final : public usecase::ISessionPort {
 public:
     std::string open_session_for(const std::string& username) override {
-        return username + "-session-token";
+        return username + ".header.signature";
     }
 };
 

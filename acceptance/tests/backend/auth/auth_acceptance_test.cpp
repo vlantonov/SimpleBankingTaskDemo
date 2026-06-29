@@ -22,7 +22,7 @@ TEST_F(AuthTest, login_with_empty_username_is_rejected) {
     statements_->then_login_is_rejected_with_validation_error();
 }
 
-TEST_F(AuthTest, DISABLED_first_login_creates_the_user_and_opens_a_session_returns_400_bad_request) {
+TEST_F(AuthTest, first_login_creates_the_user_and_opens_a_session_returns_400_bad_request) {
     SCOPED_TRACE("Scenario 2.1: First login creates the user and opens a session");
 
     statements_->when_user_logs_in("ola", "123");

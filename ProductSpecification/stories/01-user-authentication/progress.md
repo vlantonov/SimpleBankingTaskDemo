@@ -42,7 +42,7 @@
 - [x] green-adapter http (return login success JSON body with message/token from LoginResponse)
 - [S] red-adapter http (coverage: server login route hits first-login in-memory path already implemented; no failing red test to add)
 - [S] green-adapter http (coverage: server login route hits first-login in-memory path already implemented; no green change needed)
-- [ ] green-acceptance
+- [x] green-acceptance
 
 ### 2.2 First login appends USER_CREATED and LOGIN events to the log
 - [ ] red-acceptance
