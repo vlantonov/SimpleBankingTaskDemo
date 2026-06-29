@@ -10,7 +10,7 @@ public:
     explicit LoginController(usecase::LoginUsecase& login_usecase,
                              const ExceptionHandler& exception_handler);
 
-    void handle_login(const httplib::Request& req, httplib::Response& res);
+    void handle_login(const httplib::Request& req, httplib::Response& res) const;
 
 private:
     usecase::LoginUsecase& login_usecase_;

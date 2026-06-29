@@ -9,13 +9,13 @@ LoginController::LoginController(usecase::LoginUsecase& login_usecase,
     : login_usecase_(login_usecase)
     , exception_handler_(exception_handler) {}
 
-void LoginController::handle_login(const httplib::Request& req, httplib::Response& res) {
-    auto json = nlohmann::json::parse(req.body);
-    std::string username = json.value("user", "");
-    std::string pin = json.value("pin", "");
-
+void LoginController::handle_login(const httplib::Request& req, httplib::Response& res) const {
+    const auto json = nlohmann::json::parse(req.body);
     exception_handler_.handle([&]() {
-        login_usecase_.execute(domain::LoginRequest{username, pin});
+        login_usecase_.execute(domain::LoginRequest{
+            json.value("user", ""),
+            json.value("pin", "")
+        });
     }, res);
 }
 
