@@ -18,8 +18,8 @@
 - [x] green-adapter http
 - [x] red-adapter http (coverage: malformed JSON body → parse_error uncaught in LoginController)
 - [x] green-adapter http (coverage: malformed JSON body → parse_error uncaught in LoginController)
-- [~] red-adapter http (server routing: wire POST /api/v1/login into banking_server main.cpp)
-- [ ] green-adapter http (server routing: wire POST /api/v1/login into banking_server main.cpp)
+- [x] red-adapter http (server routing: wire POST /api/v1/login into banking_server main.cpp)
+- [~] green-adapter http (server routing: wire POST /api/v1/login into banking_server main.cpp)
 - [ ] green-acceptance
 
 ### 1.2 Login with empty PIN is rejected
