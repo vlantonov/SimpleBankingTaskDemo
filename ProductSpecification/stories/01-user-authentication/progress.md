@@ -40,8 +40,8 @@
 - [x] adapters-discovery
 - [x] red-adapter http (wire LoginUsecase IUserPort/ISessionPort from adapter layer; default usecase in-layer ports are insufficient)
 - [x] green-adapter http (return login success JSON body with message/token from LoginResponse)
-- [~] red-adapter http (coverage: server login route hits first-login in-memory path)
-- [ ] green-adapter http (coverage: server login route hits first-login in-memory path)
+- [S] red-adapter http (coverage: server login route hits first-login in-memory path already implemented; no failing red test to add)
+- [S] green-adapter http (coverage: server login route hits first-login in-memory path already implemented; no green change needed)
 - [ ] green-acceptance
 
 ### 2.2 First login appends USER_CREATED and LOGIN events to the log
