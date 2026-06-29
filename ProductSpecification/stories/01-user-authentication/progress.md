@@ -25,9 +25,9 @@
 ### 1.2 Login with empty PIN is rejected
 - [S] red-acceptance (empty PIN already rejected: LoginRequest throws ValidationException mapped to HTTP 400)
 - [x] design
-- [~] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
+- [S] red-usecase (capability exists: LoginRequest rejects empty pin in domain; no usecase production change)
+- [S] green-usecase (no implementation needed in usecase layer for empty-pin validation)
+- [~] adapters-discovery
 - [ ] green-acceptance
 
 ### 2.1 First login creates the user and opens a session
