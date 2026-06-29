@@ -35,8 +35,8 @@
 ### 2.1 First login creates the user and opens a session
 - [x] red-acceptance
 - [x] design
-- [~] red-usecase
-- [ ] green-usecase
+- [x] red-usecase
+- [~] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
 
