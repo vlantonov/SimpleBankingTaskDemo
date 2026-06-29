@@ -10,6 +10,7 @@ target_link_libraries(acceptance_tests PRIVATE
     httplib::httplib
     nlohmann_json::nlohmann_json
     GTest::gtest_main
+    GTest::gmock
 )
 
 target_compile_definitions(acceptance_tests PRIVATE

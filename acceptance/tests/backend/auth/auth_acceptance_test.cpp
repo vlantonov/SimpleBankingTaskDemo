@@ -28,3 +28,10 @@ TEST_F(AuthTest, first_login_creates_the_user_and_opens_a_session_returns_400_ba
     statements_->when_user_logs_in("ola", "123");
     statements_->then_first_login_creates_user_and_opens_session("ola");
 }
+
+TEST_F(AuthTest, DISABLED_first_login_appends_user_created_and_login_events_to_the_log) {
+    SCOPED_TRACE("Scenario 2.2: First login appends USER_CREATED and LOGIN events to the log");
+
+    statements_->when_user_logs_in("ola", "123");
+    statements_->then_first_login_appends_user_created_and_login_events("ola");
+}
