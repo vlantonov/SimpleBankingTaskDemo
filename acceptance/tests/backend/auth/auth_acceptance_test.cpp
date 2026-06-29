@@ -15,7 +15,7 @@ protected:
     std::unique_ptr<AuthStatements> statements_;
 };
 
-TEST_F(AuthTest, DISABLED_login_with_empty_username_is_rejected) {
+TEST_F(AuthTest, login_with_empty_username_is_rejected) {
     SCOPED_TRACE("Scenario 1.1: Login with empty username is rejected");
 
     statements_->assert_login_rejected_with_validation_error("", "123");
