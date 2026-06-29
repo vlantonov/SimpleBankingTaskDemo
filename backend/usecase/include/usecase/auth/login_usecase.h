@@ -1,12 +1,45 @@
 #pragma once
+#include <memory>
+#include <optional>
+#include <string>
 #include "domain/auth/login_request.h"
 #include "usecase/auth/login_response.h"
 
 namespace usecase {
 
+struct AuthUser {
+    std::string username;
+    std::string pin;
+};
+
+class IUserPort {
+public:
+    virtual ~IUserPort() = default;
+    virtual std::optional<AuthUser> find_by_username(const std::string& username) const = 0;
+    virtual AuthUser create(const std::string& username, const std::string& pin) = 0;
+};
+
+class ISessionPort {
+public:
+    virtual ~ISessionPort() = default;
+    virtual std::string open_session_for(const std::string& username) = 0;
+};
+
 class LoginUsecase {
 public:
+    LoginUsecase();
+    LoginUsecase(std::unique_ptr<IUserPort> user_port,
+                 std::unique_ptr<ISessionPort> session_port);
+
     LoginResponse execute(const domain::LoginRequest& request);
+
+private:
+    static domain::LoginRequest validated_copy_of(const domain::LoginRequest& request);
+    AuthUser find_or_create_user(const domain::LoginRequest& validated_request);
+    static std::string welcome_message_for(const AuthUser& user);
+
+    std::unique_ptr<IUserPort> user_port_;
+    std::unique_ptr<ISessionPort> session_port_;
 };
 
 }
