@@ -33,8 +33,8 @@
 - [S] green-acceptance (no disabled acceptance test exists for scenario 1.2; enable-only step not applicable)
 
 ### 2.1 First login creates the user and opens a session
-- [~] red-acceptance
-- [ ] design
+- [x] red-acceptance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
