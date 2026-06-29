@@ -4,6 +4,25 @@
 
 namespace adapters::http {
 
+namespace {
+
+domain::LoginRequest to_login_request(const nlohmann::json& json) {
+    return domain::LoginRequest{
+        json.value("user", ""),
+        json.value("pin", "")
+    };
+}
+
+nlohmann::json success_response_body(const std::string& message, const std::string& token) {
+    nlohmann::json body;
+    body["message"] = message;
+    body["token"] = token;
+    body["error"] = "";
+    return body;
+}
+
+}
+
 LoginController::LoginController(usecase::LoginUsecase& login_usecase,
                                  const ExceptionHandler& exception_handler)
     : login_usecase_(login_usecase)
@@ -12,10 +31,10 @@ LoginController::LoginController(usecase::LoginUsecase& login_usecase,
 void LoginController::handle_login(const httplib::Request& req, httplib::Response& res) const {
     exception_handler_.handle([&]() {
         const auto json = nlohmann::json::parse(req.body);
-        login_usecase_.execute(domain::LoginRequest{
-            json.value("user", ""),
-            json.value("pin", "")
-        });
+        const auto response = login_usecase_.execute(to_login_request(json));
+        const auto body = success_response_body(response.message, response.token);
+        res.status = 200;
+        res.set_content(body.dump(), "application/json");
     }, res);
 }
 

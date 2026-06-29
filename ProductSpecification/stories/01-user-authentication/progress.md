@@ -39,7 +39,9 @@
 - [x] green-usecase
 - [x] adapters-discovery
 - [x] red-adapter http (wire LoginUsecase IUserPort/ISessionPort from adapter layer; default usecase in-layer ports are insufficient)
-- [~] green-adapter http (return login success JSON body with message/token from LoginResponse)
+- [x] green-adapter http (return login success JSON body with message/token from LoginResponse)
+- [~] red-adapter http (coverage: server login route hits first-login in-memory path)
+- [ ] green-adapter http (coverage: server login route hits first-login in-memory path)
 - [ ] green-acceptance
 
 ### 2.2 First login appends USER_CREATED and LOGIN events to the log
