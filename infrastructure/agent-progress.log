@@ -1,11 +1,11 @@
-[18:09:18] [green-agent] START: green-usecase scenario 1.1 Login with empty username is rejected
-[18:10:10] [green-agent] RUN: 1 passed, 0 failed
-[18:10:10] [green-agent] DONE: 1 test passed
-[18:13:21] [refactor-agent] START: green-usecase 1.1 domain/auth
-[18:13:35] [refactor-agent] SCAN: 2 smells: non-const fields in value object; missing trailing underscore on members
-[18:13:48] [refactor-agent] FIX: LoginRequest fields const std::string + trailing underscore (username_, pin_)
-[18:14:41] [refactor-agent] RUN: 1 passed, 0 failed
-[18:14:41] [refactor-agent] DONE
-[18:15:37] [coverage-agent] START: usecase module scenario 1.1
-[18:17:33] [coverage-agent] RUN: login_request.cpp 100% lines, 40% branches taken; login_usecase.cpp 0% lines
-[18:17:33] [coverage-agent] DONE: CLEAN - all gaps covered by existing scenarios 1.2 and 2.x
+[21:23:47] [green-agent] START: green-adapter http server routing
+[21:28:32] [green-agent] RUN: server_routing_tests 1 passed, 0 failed
+[21:28:32] [green-agent] DONE: 4 total tests passing (1 routing + 2 adapter_http + 1 usecase)
+[21:32:00] [refactor-agent] START: green-adapter http server routing
+[21:32:00] [refactor-agent] SCAN: A1 configure_server=15lines, A2 nesting-depth-2 error-handler, A30/A45 error-handler block independent
+[21:33:18] [refactor-agent] FIX: extracted handle_error + configure_error_handler as file-local statics
+[21:33:18] [refactor-agent] RUN: server_routing=1pass adapter_http=2pass usecase=1pass
+[21:33:18] [refactor-agent] DONE
+[21:33:52] [coverage-agent] START: server_configurator.cpp
+[21:35:16] [coverage-agent] RUN: handle_error 15% blocks — if(body.empty()) true-branch uncovered (line 8)
+[21:35:16] [coverage-agent] DONE: 1 gap classified as infrastructure-level 404 fallback — no steps added
