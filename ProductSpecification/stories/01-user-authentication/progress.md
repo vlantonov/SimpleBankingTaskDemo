@@ -24,8 +24,8 @@
 
 ### 1.2 Login with empty PIN is rejected
 - [S] red-acceptance (empty PIN already rejected: LoginRequest throws ValidationException mapped to HTTP 400)
-- [~] design
-- [ ] red-usecase
+- [x] design
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
