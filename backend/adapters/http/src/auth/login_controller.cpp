@@ -1,5 +1,6 @@
 #include "adapters/http/auth/login_controller.h"
-#include <stdexcept>
+#include "domain/auth/login_request.h"
+#include <nlohmann/json.hpp>
 
 namespace adapters::http {
 
@@ -9,7 +10,13 @@ LoginController::LoginController(usecase::LoginUsecase& login_usecase,
     , exception_handler_(exception_handler) {}
 
 void LoginController::handle_login(const httplib::Request& req, httplib::Response& res) {
-    throw std::logic_error("Not implemented");
+    auto json = nlohmann::json::parse(req.body);
+    std::string username = json.value("user", "");
+    std::string pin = json.value("pin", "");
+
+    exception_handler_.handle([&]() {
+        login_usecase_.execute(domain::LoginRequest{username, pin});
+    }, res);
 }
 
 }

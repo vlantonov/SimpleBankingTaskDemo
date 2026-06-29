@@ -12,7 +12,7 @@ protected:
     LoginControllerStatements statements_{controller_, exception_handler_};
 };
 
-TEST_F(LoginControllerTest, DISABLED_login_with_empty_username_is_rejected) {
+TEST_F(LoginControllerTest, login_with_empty_username_is_rejected) {
     SCOPED_TRACE("Scenario 1.1: HTTP adapter — Login with empty username rejected with 400");
 
     statements_.assert_empty_username_rejected_with_validation_error();
