@@ -10,8 +10,8 @@ LoginController::LoginController(usecase::LoginUsecase& login_usecase,
     , exception_handler_(exception_handler) {}
 
 void LoginController::handle_login(const httplib::Request& req, httplib::Response& res) const {
-    const auto json = nlohmann::json::parse(req.body);
     exception_handler_.handle([&]() {
+        const auto json = nlohmann::json::parse(req.body);
         login_usecase_.execute(domain::LoginRequest{
             json.value("user", ""),
             json.value("pin", "")
