@@ -23,3 +23,9 @@ TEST_F(LoginControllerTest, login_with_malformed_json_body_is_rejected) {
 
     statements_.assert_malformed_json_rejected_with_bad_request();
 }
+
+TEST_F(LoginControllerTest, DISABLED_first_login_creates_user_and_opens_session_status_not_set) {
+    SCOPED_TRACE("Scenario 2.1: HTTP adapter — first login returns welcome message and token");
+
+    statements_.assert_first_login_creates_user_and_opens_session();
+}

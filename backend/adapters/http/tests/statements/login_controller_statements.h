@@ -10,28 +10,35 @@ public:
         : controller_(controller) {}
 
     void assert_empty_username_rejected_with_validation_error() {
-        auto res = send_login_request(R"({"user":"","pin":"123"})");
-
-        EXPECT_EQ(res.status, 400) << "status code";
-        EXPECT_EQ(res.get_header_value("Content-Type"), "application/json") << "Content-Type header";
-        auto body = nlohmann::json::parse(res.body);
-        EXPECT_EQ(body.value("error", ""), "Validation error") << "error field";
-        EXPECT_EQ(body.value("token", "PRESENT"), "") << "token must be absent";
-        EXPECT_EQ(body.value("message", "PRESENT"), "") << "message must be absent";
+        assert_error_response(
+            send_login_request(R"({"user":"","pin":"123"})"),
+            "Validation error"
+        );
     }
 
     void assert_malformed_json_rejected_with_bad_request() {
-        auto res = send_login_request("not valid json {{{");
+        assert_error_response(send_login_request("not valid json {{{"), "Bad request");
+    }
 
-        EXPECT_EQ(res.status, 400) << "status code";
-        EXPECT_EQ(res.get_header_value("Content-Type"), "application/json") << "Content-Type header";
-        auto body = nlohmann::json::parse(res.body);
-        EXPECT_EQ(body.value("error", ""), "Bad request") << "error field";
-        EXPECT_EQ(body.value("token", "PRESENT"), "") << "token must be absent";
-        EXPECT_EQ(body.value("message", "PRESENT"), "") << "message must be absent";
+    void assert_first_login_creates_user_and_opens_session() {
+        auto res = send_login_request(R"({"user":"ola","pin":"123"})");
+
+        ASSERT_EQ(res.status, 200) << "status code";
+        ASSERT_EQ(res.get_header_value("Content-Type"), "application/json") << "Content-Type header";
+        const auto body = nlohmann::json::parse(res.body);
+        const auto expected_body = nlohmann::json{{"message", "Welcome, ola"}, {"token", "ola-session-token"}, {"error", ""}};
+        EXPECT_EQ(body, expected_body) << "response body";
     }
 
 private:
+    void assert_error_response(const httplib::Response& response, const std::string& error) {
+        EXPECT_EQ(response.status, 400) << "status code";
+        EXPECT_EQ(response.get_header_value("Content-Type"), "application/json") << "Content-Type header";
+        const auto body = nlohmann::json::parse(response.body);
+        const auto expected_body = nlohmann::json{{"error", error}, {"token", ""}, {"message", ""}};
+        EXPECT_EQ(body, expected_body) << "response body";
+    }
+
     httplib::Response send_login_request(const std::string& body) {
         httplib::Request req;
         req.body = body;
