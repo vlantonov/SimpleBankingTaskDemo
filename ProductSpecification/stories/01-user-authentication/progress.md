@@ -30,10 +30,10 @@
 - [x] adapters-discovery
 - [S] red-adapter http (no new http adapter behavior: controller already constructs LoginRequest with pin and delegates to mapped exception handler)
 - [S] green-adapter http (no adapter implementation changes required for empty-pin validation path)
-- [~] green-acceptance
+- [S] green-acceptance (no disabled acceptance test exists for scenario 1.2; enable-only step not applicable)
 
 ### 2.1 First login creates the user and opens a session
-- [ ] red-acceptance
+- [~] red-acceptance
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase
