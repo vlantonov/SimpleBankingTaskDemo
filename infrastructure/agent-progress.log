@@ -1,16 +1,11 @@
-[17:28:55] [red-agent] START: Scenario 1.1 Login with empty username is rejected
-[17:32:55] [red-agent] PREDICT: HTTP 400 expected, 404 returned by stub (no /api/v1/login route)
-[17:33:42] [red-agent] RUN: FAILED - status_code=404, expected 400 (matches prediction)
-[17:34:06] [red-agent] DONE: acceptance/tests/backend/auth/auth_acceptance_test.cpp created
-[17:38:16] [test-review-agent] START: auth_acceptance_test.cpp
-[17:38:16] [test-review-agent] SCAN: VIOLATION - LoginResponse has 4 fields; only status_code was asserted. Added error, token, message assertions.
-[17:38:16] [test-review-agent] RUN: FAILED (red state preserved) - status=404 not 400; error='Not Found' not 'Validation error'
-[17:38:16] [test-review-agent] DONE
-[17:44:01] [refactor-agent] START: acceptance layer scaffolding
-[17:46:58] [refactor-agent] SCAN: VIOLATIONS - B6 serialization outside LoginRequest; B6 deserialization outside LoginResponse; A1 login()=25 lines; A2 nesting depth 3; A8 pass-through req local; A11 unused make_client()
-[17:46:58] [refactor-agent] FIX: Move to_json_string() to LoginRequest; remove inline JSON body construction in ApplicationClient
-[17:46:58] [refactor-agent] FIX: Move parse()/connection_failed()/try_parse_fields()/apply_json_fields() to LoginResponse; simplify login() to 3 lines; remove nlohmann include from ApplicationClient
-[17:46:58] [refactor-agent] FIX: Inline pass-through 'req' local in AuthStatements (A8)
-[17:46:58] [refactor-agent] FIX: Remove unused make_client() from BackendTestFixture; remove httplib include (A11)
-[17:46:58] [refactor-agent] RUN: FAILED as expected - status=404 vs 400; error='Not Found' vs 'Validation error'; 0 passed, 1 failed
-[17:46:58] [refactor-agent] DONE
+[18:09:18] [green-agent] START: green-usecase scenario 1.1 Login with empty username is rejected
+[18:10:10] [green-agent] RUN: 1 passed, 0 failed
+[18:10:10] [green-agent] DONE: 1 test passed
+[18:13:21] [refactor-agent] START: green-usecase 1.1 domain/auth
+[18:13:35] [refactor-agent] SCAN: 2 smells: non-const fields in value object; missing trailing underscore on members
+[18:13:48] [refactor-agent] FIX: LoginRequest fields const std::string + trailing underscore (username_, pin_)
+[18:14:41] [refactor-agent] RUN: 1 passed, 0 failed
+[18:14:41] [refactor-agent] DONE
+[18:15:37] [coverage-agent] START: usecase module scenario 1.1
+[18:17:33] [coverage-agent] RUN: login_request.cpp 100% lines, 40% branches taken; login_usecase.cpp 0% lines
+[18:17:33] [coverage-agent] DONE: CLEAN - all gaps covered by existing scenarios 1.2 and 2.x
