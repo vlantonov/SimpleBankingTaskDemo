@@ -27,7 +27,7 @@ protected:
 };
 
 // TDD Red Phase - configure_server is a no-op stub; POST /api/v1/login returns 404 instead of 400
-TEST_F(ServerRoutingTest, DISABLED_login_with_empty_username_returns_400_not_404) {
+TEST_F(ServerRoutingTest, login_with_empty_username_returns_400_not_404) {
     httplib::Client client("127.0.0.1", kTestPort);
     auto res = client.Post("/api/v1/login",
                            R"({"user":"","pin":"123"})",
