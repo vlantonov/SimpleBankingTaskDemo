@@ -14,8 +14,8 @@
 - [x] red-usecase
 - [x] green-usecase
 - [x] adapters-discovery (http)
-- [~] red-adapter http
-- [ ] green-adapter http
+- [x] red-adapter http
+- [~] green-adapter http
 - [ ] green-acceptance
 
 ### 1.2 Login with empty PIN is rejected
