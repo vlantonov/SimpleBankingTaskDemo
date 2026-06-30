@@ -43,16 +43,14 @@ LoginUsecase::LoginUsecase(std::unique_ptr<IUserPort> user_port,
     , session_port_(std::move(session_port))
     , auth_event_log_port_(std::move(auth_event_log_port)) {}
 
-domain::LoginRequest LoginUsecase::validated_copy_of(const domain::LoginRequest& request) {
-    return domain::LoginRequest{request.username_, request.pin_};
-}
-
-AuthUser LoginUsecase::find_or_create_user(const domain::LoginRequest& validated_request) {
-    const auto found_user = user_port_->find_by_username(validated_request.username_);
+AuthUser LoginUsecase::find_or_create_user(const domain::LoginRequest& request) {
+    const auto found_user = user_port_->find_by_username(request.username_);
     if (found_user) {
         return *found_user;
     }
-    return user_port_->create(validated_request.username_, validated_request.pin_);
+    const auto created_user = user_port_->create(request.username_, request.pin_);
+    auth_event_log_port_->append(AuthEvent{AuthEventType::kUserCreated, created_user.username});
+    return created_user;
 }
 
 std::string LoginUsecase::welcome_message_for(const AuthUser& user) {
@@ -60,9 +58,9 @@ std::string LoginUsecase::welcome_message_for(const AuthUser& user) {
 }
 
 LoginResponse LoginUsecase::execute(const domain::LoginRequest& request) {
-    const auto validated_request = validated_copy_of(request);
-    const auto user = find_or_create_user(validated_request);
+    const auto user = find_or_create_user(request);
     const auto token = session_port_->open_session_for(user.username);
+    auth_event_log_port_->append(AuthEvent{AuthEventType::kLogin, user.username});
     return LoginResponse{welcome_message_for(user), token};
 }
 
