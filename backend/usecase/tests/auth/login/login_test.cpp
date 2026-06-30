@@ -18,3 +18,8 @@ TEST_F(LoginTest, first_login_appends_user_created_and_login_events_to_the_log_c
     SCOPED_TRACE("Scenario 2.2: First login appends USER_CREATED and LOGIN events to the log");
     auth_statements_.assert_first_login_appends_user_created_and_login_events_to_log();
 }
+
+TEST_F(LoginTest, returning_user_with_wrong_pin_is_rejected_and_no_session_is_created) {
+    SCOPED_TRACE("Scenario 3.2: Returning user with wrong PIN is rejected and no session is created");
+    auth_statements_.assert_returning_user_with_wrong_pin_is_rejected_without_side_effects();
+}

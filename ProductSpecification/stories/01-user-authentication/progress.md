@@ -65,8 +65,8 @@
 ### 3.2 Returning user with wrong PIN is rejected and no session is created
 - [x] red-acceptance
 - [x] design (see ADR: decisions/returning-user-wrong-pin-decision.md)
-- [~] red-usecase
-- [ ] green-usecase
+- [x] red-usecase
+- [~] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
 

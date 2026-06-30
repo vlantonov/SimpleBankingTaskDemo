@@ -16,4 +16,10 @@ public:
         : DomainException(message) {}
 };
 
+class InvalidCredentialsException : public DomainException {
+public:
+    explicit InvalidCredentialsException(const std::string& message)
+        : DomainException(message) {}
+};
+
 }
