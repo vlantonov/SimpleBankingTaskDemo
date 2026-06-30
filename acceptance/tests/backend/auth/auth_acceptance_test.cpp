@@ -35,3 +35,20 @@ TEST_F(AuthTest, first_login_appends_user_created_and_login_events_to_the_log) {
     statements_->when_user_logs_in("ola", "123");
     statements_->then_first_login_appends_user_created_and_login_events("ola");
 }
+
+TEST_F(AuthTest, DISABLED_returning_user_with_correct_pin_receives_welcome_and_token) {
+    SCOPED_TRACE("Scenario 3.1: Returning user with correct PIN receives welcome message and new token");
+
+    statements_->given_user_already_exists_with_pin("ola", "123");
+    statements_->when_user_logs_in("ola", "123");
+    statements_->then_returning_user_receives_welcome_and_token("ola");
+    statements_->then_login_event_is_recorded_for("ola");
+}
+
+TEST_F(AuthTest, DISABLED_returning_user_with_wrong_pin_is_rejected) {
+    SCOPED_TRACE("Scenario 3.2: Returning user with wrong PIN is rejected and no session is created");
+
+    statements_->given_user_already_exists_with_pin("ola", "123");
+    statements_->when_user_logs_in("ola", "999");
+    statements_->then_login_is_rejected_with_invalid_credentials_error();
+}

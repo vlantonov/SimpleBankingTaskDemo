@@ -16,18 +16,10 @@ public:
     }
 
     void then_login_is_rejected_with_validation_error() {
-        EXPECT_THAT(
-            last_response_,
-            testing::AllOf(
-                testing::Field(&dto::auth::LoginResponse::status_code, 400),
-                testing::Field(&dto::auth::LoginResponse::error, testing::Eq("Validation error")),
-                testing::Field(&dto::auth::LoginResponse::token, testing::IsEmpty()),
-                testing::Field(&dto::auth::LoginResponse::message, testing::IsEmpty())
-            )
-        );
+        then_login_is_rejected_with_error(400, "Validation error");
     }
 
-    void then_first_login_creates_user_and_opens_session(const std::string& user) {
+    void then_login_succeeds_with_welcome_message(const std::string& user) {
         EXPECT_THAT(
             last_response_,
             testing::AllOf(
@@ -39,16 +31,37 @@ public:
         );
     }
 
+    void then_first_login_creates_user_and_opens_session(const std::string& user) {
+        then_login_succeeds_with_welcome_message(user);
+    }
+
     void then_first_login_appends_user_created_and_login_events(const std::string& user) {
         const auto log_contents = read_log_contents();
-        const auto user_created_position = log_contents.find("USER_CREATED");
-        const auto user_position = log_contents.find(user);
-        const auto login_position = log_contents.find("LOGIN");
+        assert_event_in_log(log_contents, "USER_CREATED", "USER_CREATED event must be recorded");
+        assert_event_in_log(log_contents, user, "user name must be recorded in the log");
+        assert_event_in_log(log_contents, "LOGIN", "LOGIN event must be recorded");
 
-        ASSERT_NE(user_created_position, std::string::npos) << "USER_CREATED event must be recorded";
-        ASSERT_NE(user_position, std::string::npos) << "user name must be recorded in the log";
-        ASSERT_NE(login_position, std::string::npos) << "LOGIN event must be recorded";
+        const auto user_created_position = log_contents.find("USER_CREATED");
+        const auto login_position = log_contents.find("LOGIN");
         EXPECT_LT(user_created_position, login_position) << "USER_CREATED must be logged before LOGIN";
+    }
+
+    void given_user_already_exists_with_pin(const std::string& user, const std::string& pin) {
+        when_user_logs_in(user, pin);
+    }
+
+    void then_returning_user_receives_welcome_and_token(const std::string& user) {
+        then_login_succeeds_with_welcome_message(user);
+    }
+
+    void then_login_event_is_recorded_for(const std::string& user) {
+        const auto log_contents = read_log_contents();
+        assert_event_in_log(log_contents, "LOGIN", "LOGIN event must be recorded");
+        assert_event_in_log(log_contents, user, "user name must be recorded in the log");
+    }
+
+    void then_login_is_rejected_with_invalid_credentials_error() {
+        then_login_is_rejected_with_error(401, "Invalid credentials");
     }
 
     static std::string read_log_contents() {
@@ -59,6 +72,25 @@ public:
         }
 
         return std::string{std::istreambuf_iterator<char>(log_file), std::istreambuf_iterator<char>()};
+    }
+
+private:
+    void then_login_is_rejected_with_error(int status_code, const std::string& error) {
+        EXPECT_THAT(
+            last_response_,
+            testing::AllOf(
+                testing::Field(&dto::auth::LoginResponse::status_code, status_code),
+                testing::Field(&dto::auth::LoginResponse::error, testing::Eq(error)),
+                testing::Field(&dto::auth::LoginResponse::token, testing::IsEmpty()),
+                testing::Field(&dto::auth::LoginResponse::message, testing::IsEmpty())
+            )
+        );
+    }
+
+    void assert_event_in_log(const std::string& log_contents, const std::string& event,
+                             const std::string& error_message) {
+        const auto position = log_contents.find(event);
+        ASSERT_NE(position, std::string::npos) << error_message;
     }
 
     ApplicationClient& client_;

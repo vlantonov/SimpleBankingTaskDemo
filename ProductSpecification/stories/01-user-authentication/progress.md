@@ -63,8 +63,8 @@
 - [S] green-acceptance (test proves functionality works; feature already complete)
 
 ### 3.2 Returning user with wrong PIN is rejected and no session is created
-- [~] red-acceptance
-- [ ] design
+- [x] red-acceptance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
