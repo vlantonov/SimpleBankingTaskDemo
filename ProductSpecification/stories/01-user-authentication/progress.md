@@ -47,8 +47,8 @@
 ### 2.2 First login appends USER_CREATED and LOGIN events to the log
 - [x] red-acceptance
 - [x] design
-- [ ] red-usecase
-- [ ] green-usecase
+- [x] red-usecase
+- [~] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
 

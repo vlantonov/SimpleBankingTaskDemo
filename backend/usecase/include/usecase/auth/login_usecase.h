@@ -25,11 +25,28 @@ public:
     virtual std::string open_session_for(const std::string& username) = 0;
 };
 
+enum class AuthEventType {
+    kUserCreated,
+    kLogin,
+};
+
+struct AuthEvent {
+    AuthEventType type;
+    std::string username;
+};
+
+class IAuthEventLogPort {
+public:
+    virtual ~IAuthEventLogPort() = default;
+    virtual void append(const AuthEvent& event) = 0;
+};
+
 class LoginUsecase {
 public:
     LoginUsecase();
     LoginUsecase(std::unique_ptr<IUserPort> user_port,
-                 std::unique_ptr<ISessionPort> session_port);
+                 std::unique_ptr<ISessionPort> session_port,
+                 std::unique_ptr<IAuthEventLogPort> auth_event_log_port);
 
     LoginResponse execute(const domain::LoginRequest& request);
 
@@ -40,6 +57,7 @@ private:
 
     std::unique_ptr<IUserPort> user_port_;
     std::unique_ptr<ISessionPort> session_port_;
+    std::unique_ptr<IAuthEventLogPort> auth_event_log_port_;
 };
 
 }

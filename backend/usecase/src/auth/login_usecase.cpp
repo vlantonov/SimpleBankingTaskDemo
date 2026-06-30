@@ -22,15 +22,26 @@ public:
     }
 };
 
+class NoOpAuthEventLogPort final : public IAuthEventLogPort {
+public:
+    void append(const AuthEvent&) override {}
+};
+
 }  // namespace
 
 LoginUsecase::LoginUsecase()
-    : LoginUsecase(std::make_unique<FirstLoginUserPort>(), std::make_unique<TokenSessionPort>()) {}
+    : LoginUsecase(
+        std::make_unique<FirstLoginUserPort>(),
+        std::make_unique<TokenSessionPort>(),
+        std::make_unique<NoOpAuthEventLogPort>()
+    ) {}
 
 LoginUsecase::LoginUsecase(std::unique_ptr<IUserPort> user_port,
-                           std::unique_ptr<ISessionPort> session_port)
+                           std::unique_ptr<ISessionPort> session_port,
+                           std::unique_ptr<IAuthEventLogPort> auth_event_log_port)
     : user_port_(std::move(user_port))
-    , session_port_(std::move(session_port)) {}
+    , session_port_(std::move(session_port))
+    , auth_event_log_port_(std::move(auth_event_log_port)) {}
 
 domain::LoginRequest LoginUsecase::validated_copy_of(const domain::LoginRequest& request) {
     return domain::LoginRequest{request.username_, request.pin_};
