@@ -51,8 +51,8 @@
 - [x] green-usecase
 - [x] adapters-discovery
 - [x] red-adapter http (server login composition does not wire IAuthEventLogPort to persistent logging adapter)
-- [~] green-adapter http (append USER_CREATED and LOGIN events to auth_events.log via adapter)
-- [ ] green-acceptance
+- [x] green-adapter http (append USER_CREATED and LOGIN events to auth_events.log via adapter)
+- [~] green-acceptance
 
 ### 3.1 Returning user with correct PIN receives a welcome message and new token
 - [ ] red-acceptance

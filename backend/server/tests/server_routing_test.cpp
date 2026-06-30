@@ -38,10 +38,6 @@ void assert_validation_error_response(const httplib::Result& response) {
     EXPECT_EQ(body.value("message", "missing"), "");
 }
 
-httplib::Result post_first_login_request(int port) {
-    return post_login_request(port, R"({"user":"ola","pin":"123"})");
-}
-
 }  // namespace
 
 class ServerRoutingTest : public ::testing::Test {
@@ -128,8 +124,8 @@ protected:
     std::thread server_thread_;
 };
 
-TEST_F(ServerAuthEventLogRoutingTest, DISABLED_first_login_writes_user_created_then_login_to_auth_event_log) {
-    const auto res = post_first_login_request(kTestPort);
+TEST_F(ServerAuthEventLogRoutingTest, first_login_writes_user_created_then_login_to_auth_event_log) {
+    const auto res = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
     ASSERT_NE(res, nullptr) << "Connection to test server failed";
     ASSERT_EQ(res->status, 200);
 

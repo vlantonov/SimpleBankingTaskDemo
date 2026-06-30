@@ -2,6 +2,7 @@
 #include "adapters/http/auth/login_controller.h"
 #include "adapters/http/exception_handler.h"
 #include "usecase/auth/login_usecase.h"
+#include <fstream>
 #include <memory>
 #include <optional>
 
@@ -25,16 +26,30 @@ public:
     }
 };
 
-class NoOpAuthEventLogPort final : public usecase::IAuthEventLogPort {
+class FileAuthEventLogPort final : public usecase::IAuthEventLogPort {
 public:
-    void append(const usecase::AuthEvent&) override {}
+    void append(const usecase::AuthEvent& event) override {
+        std::ofstream output{"auth_events.log", std::ios::app};
+        output << to_event_type(event.type) << " " << event.username << "\n";
+    }
+
+private:
+    static const char* to_event_type(usecase::AuthEventType type) {
+        switch (type) {
+            case usecase::AuthEventType::kUserCreated:
+                return "USER_CREATED";
+            case usecase::AuthEventType::kLogin:
+                return "LOGIN";
+        }
+        return "LOGIN";
+    }
 };
 
 usecase::LoginUsecase create_login_usecase() {
     return usecase::LoginUsecase(
         std::make_unique<InMemoryUserPort>(),
         std::make_unique<TokenSessionPort>(),
-        std::make_unique<NoOpAuthEventLogPort>()
+        std::make_unique<FileAuthEventLogPort>()
     );
 }
 
