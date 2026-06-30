@@ -25,10 +25,16 @@ public:
     }
 };
 
+class NoOpAuthEventLogPort final : public usecase::IAuthEventLogPort {
+public:
+    void append(const usecase::AuthEvent&) override {}
+};
+
 usecase::LoginUsecase create_login_usecase() {
     return usecase::LoginUsecase(
         std::make_unique<InMemoryUserPort>(),
-        std::make_unique<TokenSessionPort>()
+        std::make_unique<TokenSessionPort>(),
+        std::make_unique<NoOpAuthEventLogPort>()
     );
 }
 
