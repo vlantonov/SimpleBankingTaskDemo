@@ -55,15 +55,15 @@
 - [x] green-acceptance
 
 ### 3.1 Returning user with correct PIN receives a welcome message and new token
-- [~] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (returning-user login already implemented: LoginUsecase find_or_create handles existing users, FileAuthEventLogPort logs LOGIN events on every login, LoginController returns welcome message and token)
+- [S] design (existing implementation validated)
+- [S] red-usecase (capability exists: LoginUsecase already handles both first-login and returning-user paths)
+- [S] green-usecase (no implementation needed in usecase layer for returning-user login)
+- [S] adapters-discovery (no new adapters needed)
+- [S] green-acceptance (test proves functionality works; feature already complete)
 
 ### 3.2 Returning user with wrong PIN is rejected and no session is created
-- [ ] red-acceptance
+- [~] red-acceptance
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase
