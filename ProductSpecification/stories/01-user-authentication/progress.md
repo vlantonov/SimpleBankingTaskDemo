@@ -66,8 +66,8 @@
 - [x] red-acceptance
 - [x] design (see ADR: decisions/returning-user-wrong-pin-decision.md)
 - [x] red-usecase
-- [~] green-usecase
-- [ ] adapters-discovery
+- [x] green-usecase
+- [~] adapters-discovery
 - [ ] green-acceptance
 
 ### 4.1 Second login while a session is already active is rejected

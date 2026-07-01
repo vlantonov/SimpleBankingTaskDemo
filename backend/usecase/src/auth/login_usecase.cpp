@@ -1,4 +1,5 @@
 #include "usecase/auth/login_usecase.h"
+#include "domain/domain_exception.h"
 
 namespace usecase {
 
@@ -44,13 +45,27 @@ LoginUsecase::LoginUsecase(std::unique_ptr<IUserPort> user_port,
     , auth_event_log_port_(std::move(auth_event_log_port)) {}
 
 AuthUser LoginUsecase::find_or_create_user(const domain::LoginRequest& request) {
-    const auto found_user = user_port_->find_by_username(request.username_);
-    if (found_user) {
-        return *found_user;
+    if (const auto found_user = user_port_->find_by_username(request.username_)) {
+        return validate_user_credentials(*found_user, request.pin_);
     }
+    return create_user_and_log_event(request);
+}
+
+AuthUser LoginUsecase::validate_user_credentials(const AuthUser& user, const std::string& pin) {
+    if (user.pin != pin) {
+        throw domain::InvalidCredentialsException("Invalid credentials");
+    }
+    return user;
+}
+
+AuthUser LoginUsecase::create_user_and_log_event(const domain::LoginRequest& request) {
     const auto created_user = user_port_->create(request.username_, request.pin_);
-    auth_event_log_port_->append(AuthEvent{AuthEventType::kUserCreated, created_user.username});
+    append_auth_event(AuthEventType::kUserCreated, created_user.username);
     return created_user;
+}
+
+void LoginUsecase::append_auth_event(AuthEventType type, const std::string& username) {
+    auth_event_log_port_->append(AuthEvent{type, username});
 }
 
 std::string LoginUsecase::welcome_message_for(const AuthUser& user) {
@@ -60,7 +75,7 @@ std::string LoginUsecase::welcome_message_for(const AuthUser& user) {
 LoginResponse LoginUsecase::execute(const domain::LoginRequest& request) {
     const auto user = find_or_create_user(request);
     const auto token = session_port_->open_session_for(user.username);
-    auth_event_log_port_->append(AuthEvent{AuthEventType::kLogin, user.username});
+    append_auth_event(AuthEventType::kLogin, user.username);
     return LoginResponse{welcome_message_for(user), token};
 }
 

@@ -52,6 +52,9 @@ public:
 
 private:
     AuthUser find_or_create_user(const domain::LoginRequest& request);
+    static AuthUser validate_user_credentials(const AuthUser& user, const std::string& pin);
+    AuthUser create_user_and_log_event(const domain::LoginRequest& request);
+    void append_auth_event(AuthEventType type, const std::string& username);
     static std::string welcome_message_for(const AuthUser& user);
 
     std::unique_ptr<IUserPort> user_port_;
