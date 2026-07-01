@@ -23,20 +23,25 @@ public:
     void assert_first_login_creates_user_and_opens_session() {
         auto res = send_login_request(R"({"user":"ola","pin":"123"})");
 
-        ASSERT_EQ(res.status, 200) << "status code";
-        ASSERT_EQ(res.get_header_value("Content-Type"), "application/json") << "Content-Type header";
-        const auto body = nlohmann::json::parse(res.body);
         const auto expected_body = nlohmann::json{{"message", "Welcome, ola"}, {"token", "ola-session-token"}, {"error", ""}};
-        EXPECT_EQ(body, expected_body) << "response body";
+        assert_json_response(res, 200, expected_body);
+    }
+
+    void assert_returning_user_with_wrong_pin_is_rejected_with_invalid_credentials() {
+        send_login_request(R"({"user":"ola","pin":"123"})");
+        assert_error_response(send_login_request(R"({"user":"ola","pin":"999"})"), "Invalid credentials", 401);
     }
 
 private:
-    void assert_error_response(const httplib::Response& response, const std::string& error) {
-        EXPECT_EQ(response.status, 400) << "status code";
+    void assert_json_response(const httplib::Response& response, int expected_status, const nlohmann::json& expected_body) {
+        EXPECT_EQ(response.status, expected_status) << "status code";
         EXPECT_EQ(response.get_header_value("Content-Type"), "application/json") << "Content-Type header";
-        const auto body = nlohmann::json::parse(response.body);
+        EXPECT_EQ(nlohmann::json::parse(response.body), expected_body) << "response body";
+    }
+
+    void assert_error_response(const httplib::Response& response, const std::string& error, int expected_status = 400) {
         const auto expected_body = nlohmann::json{{"error", error}, {"token", ""}, {"message", ""}};
-        EXPECT_EQ(body, expected_body) << "response body";
+        assert_json_response(response, expected_status, expected_body);
     }
 
     httplib::Response send_login_request(const std::string& body) {

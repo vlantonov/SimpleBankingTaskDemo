@@ -68,8 +68,8 @@
 - [x] red-usecase
 - [x] green-usecase
 - [x] adapters-discovery
-- [~] red-adapter http (map InvalidCredentialsException to HTTP 401 in ExceptionHandler)
-- [ ] green-adapter http (return HTTP 401 body with error="Invalid credentials")
+- [x] red-adapter http (map InvalidCredentialsException to HTTP 401 in ExceptionHandler)
+- [~] green-adapter http (return HTTP 401 body with error="Invalid credentials")
 - [ ] green-acceptance
 
 ### 4.1 Second login while a session is already active is rejected
