@@ -5,18 +5,28 @@
 #include <fstream>
 #include <memory>
 #include <optional>
+#include <unordered_map>
 
 namespace {
 
 class InMemoryUserPort final : public usecase::IUserPort {
 public:
-    std::optional<usecase::AuthUser> find_by_username(const std::string&) const override {
-        return std::nullopt;
+    std::optional<usecase::AuthUser> find_by_username(const std::string& username) const override {
+        const auto it = users_.find(username);
+        if (it == users_.end()) {
+            return std::nullopt;
+        }
+        return it->second;
     }
 
     usecase::AuthUser create(const std::string& username, const std::string& pin) override {
-        return usecase::AuthUser{username, pin};
+        const auto user = usecase::AuthUser{username, pin};
+        users_[username] = user;
+        return user;
     }
+
+private:
+    mutable std::unordered_map<std::string, usecase::AuthUser> users_;
 };
 
 class TokenSessionPort final : public usecase::ISessionPort {

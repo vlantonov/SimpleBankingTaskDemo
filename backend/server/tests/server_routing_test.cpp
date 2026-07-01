@@ -133,3 +133,18 @@ TEST_F(ServerAuthEventLogRoutingTest, first_login_writes_user_created_then_login
     const auto parsed_events = parse_auth_event_log(log_contents);
     assert_auth_events_written(parsed_events);
 }
+
+TEST_F(ServerAuthEventLogRoutingTest, returning_user_with_wrong_pin_returns_401_invalid_credentials) {
+    const auto first_login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
+    ASSERT_NE(first_login, nullptr) << "Connection to test server failed on first login";
+    ASSERT_EQ(first_login->status, 200);
+
+    const auto second_login = post_login_request(kTestPort, R"({"user":"ola","pin":"999"})");
+    ASSERT_NE(second_login, nullptr) << "Connection to test server failed on wrong-pin login";
+    EXPECT_EQ(second_login->status, 401);
+
+    const auto body = nlohmann::json::parse(second_login->body);
+    EXPECT_EQ(body.value("error", ""), "Invalid credentials");
+    EXPECT_EQ(body.value("token", "missing"), "");
+    EXPECT_EQ(body.value("message", "missing"), "");
+}

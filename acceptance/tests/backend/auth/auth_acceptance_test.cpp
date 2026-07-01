@@ -45,7 +45,7 @@ TEST_F(AuthTest, DISABLED_returning_user_with_correct_pin_receives_welcome_and_t
     statements_->then_login_event_is_recorded_for("ola");
 }
 
-TEST_F(AuthTest, DISABLED_returning_user_with_wrong_pin_is_rejected) {
+TEST_F(AuthTest, returning_user_with_wrong_pin_is_rejected) {
     SCOPED_TRACE("Scenario 3.2: Returning user with wrong PIN is rejected and no session is created");
 
     statements_->given_user_already_exists_with_pin("ola", "123");
