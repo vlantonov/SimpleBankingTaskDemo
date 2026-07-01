@@ -30,12 +30,9 @@ void ExceptionHandler::set_validation_error(const domain::ValidationException& e
 }
 
 void ExceptionHandler::set_error_response(const std::string& error, httplib::Response& res) const {
-    nlohmann::json body;
-    body["error"] = error;
-    body["token"] = "";
-    body["message"] = "";
     res.status = 400;
-    res.set_content(body.dump(), "application/json");
+    res.set_content(nlohmann::json{{"error", error}, {"token", ""}, {"message", ""}}.dump(),
+                    "application/json");
 }
 
 }

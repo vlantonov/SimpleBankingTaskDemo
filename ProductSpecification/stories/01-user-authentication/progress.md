@@ -71,8 +71,8 @@
 - [x] red-adapter http (map InvalidCredentialsException to HTTP 401 in ExceptionHandler)
 - [x] green-adapter http (return HTTP 401 body with error="Invalid credentials")
 - [S] red-adapter http (coverage: preserve non-JWT token values in LoginController response mapping; capability already implemented in LoginController token mapping)
-- [~] green-adapter http (coverage: preserve non-JWT token values in LoginController response mapping)
-- [ ] green-acceptance
+- [x] green-adapter http (coverage: preserve non-JWT token values in LoginController response mapping)
+- [~] green-acceptance
 
 ### 4.1 Second login while a session is already active is rejected
 - [ ] red-acceptance
