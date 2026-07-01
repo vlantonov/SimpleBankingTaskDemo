@@ -6,11 +6,19 @@ namespace adapters::http {
 void ExceptionHandler::handle(const std::function<void()>& action, httplib::Response& res) const {
     try {
         action();
+    } catch (const domain::InvalidCredentialsException& e) {
+        set_invalid_credentials_error(e, res);
     } catch (const domain::ValidationException& e) {
         set_validation_error(e, res);
     } catch (const std::exception&) {
         set_bad_request_error(res);
     }
+}
+
+void ExceptionHandler::set_invalid_credentials_error(const domain::InvalidCredentialsException& e,
+                                                    httplib::Response& res) const {
+    set_error_response(e.what(), res);
+    res.status = 401;
 }
 
 void ExceptionHandler::set_bad_request_error(httplib::Response& res) const {

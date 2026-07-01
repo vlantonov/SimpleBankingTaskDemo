@@ -1,5 +1,6 @@
 #include "usecase/auth/login_usecase.h"
 #include "domain/domain_exception.h"
+#include <unordered_map>
 
 namespace usecase {
 
@@ -7,13 +8,22 @@ namespace {
 
 class FirstLoginUserPort final : public IUserPort {
 public:
-    std::optional<AuthUser> find_by_username(const std::string&) const override {
-        return std::nullopt;
+    std::optional<AuthUser> find_by_username(const std::string& username) const override {
+        const auto it = users_.find(username);
+        if (it == users_.end()) {
+            return std::nullopt;
+        }
+        return it->second;
     }
 
     AuthUser create(const std::string& username, const std::string& pin) override {
-        return AuthUser{username, pin};
+        const auto user = AuthUser{username, pin};
+        users_[username] = user;
+        return user;
     }
+
+private:
+    mutable std::unordered_map<std::string, AuthUser> users_;
 };
 
 class TokenSessionPort final : public ISessionPort {

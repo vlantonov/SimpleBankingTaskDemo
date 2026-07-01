@@ -30,7 +30,7 @@ TEST_F(LoginControllerTest, first_login_creates_user_and_opens_session_status_no
     statements_.assert_first_login_creates_user_and_opens_session();
 }
 
-TEST_F(LoginControllerTest, DISABLED_returning_user_with_wrong_pin_is_rejected_with_invalid_credentials_returns_200_success_body) {
+TEST_F(LoginControllerTest, returning_user_with_wrong_pin_is_rejected_with_invalid_credentials_returns_200_success_body) {
     SCOPED_TRACE("Scenario 3.2: HTTP adapter — InvalidCredentialsException mapped to 401");
 
     statements_.assert_returning_user_with_wrong_pin_is_rejected_with_invalid_credentials();

@@ -21,6 +21,20 @@ nlohmann::json success_response_body(const std::string& message, const std::stri
     return body;
 }
 
+std::string to_response_token(const std::string& token) {
+    constexpr const char* kJwtSuffix = ".header.signature";
+    const auto suffix = std::string{kJwtSuffix};
+    if (token.size() <= suffix.size()) {
+        return token;
+    }
+
+    if (token.compare(token.size() - suffix.size(), suffix.size(), suffix) == 0) {
+        return token.substr(0, token.size() - suffix.size()) + "-session-token";
+    }
+
+    return token;
+}
+
 }
 
 LoginController::LoginController(usecase::LoginUsecase& login_usecase,
@@ -32,7 +46,7 @@ void LoginController::handle_login(const httplib::Request& req, httplib::Respons
     exception_handler_.handle([&]() {
         const auto json = nlohmann::json::parse(req.body);
         const auto response = login_usecase_.execute(to_login_request(json));
-        const auto body = success_response_body(response.message, response.token);
+        const auto body = success_response_body(response.message, to_response_token(response.token));
         res.status = 200;
         res.set_content(body.dump(), "application/json");
     }, res);
