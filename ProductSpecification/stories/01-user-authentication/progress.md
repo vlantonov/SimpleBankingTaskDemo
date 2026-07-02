@@ -77,8 +77,8 @@
 ### 4.1 Second login while a session is already active is rejected
 - [x] red-acceptance
 - [x] design (see ADR: decisions/active-session-conflict-decision.md)
-- [~] red-usecase
-- [ ] green-usecase
+- [x] red-usecase
+- [~] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
 

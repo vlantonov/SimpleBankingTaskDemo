@@ -40,6 +40,13 @@ public:
 
 class RecordingSessionPortForAuthStatements final : public usecase::ISessionPort {
 public:
+    explicit RecordingSessionPortForAuthStatements(bool has_active_session = false)
+        : has_active_session_(has_active_session) {}
+
+    bool has_active_session_for(const std::string&) const override {
+        return has_active_session_;
+    }
+
     std::string open_session_for(const std::string& username) override {
         opened_usernames_.push_back(username);
         return username + ".header.signature";
@@ -50,6 +57,7 @@ public:
     }
 
 private:
+    bool has_active_session_;
     std::vector<std::string> opened_usernames_;
 };
 
@@ -98,10 +106,18 @@ public:
 
     void assert_returning_user_with_wrong_pin_is_rejected_without_side_effects() {
         auto setup = create_usecase_with_existing_user_and_recording_ports();
-
         EXPECT_THAT(
             [&]() { setup.usecase.execute(login_scope_for_existing_user_with_wrong_pin().to_login_request()); },
             testing::ThrowsMessage<domain::InvalidCredentialsException>(testing::Eq("Invalid credentials"))
+        );
+        assert_no_side_effects(*setup.session_port, *setup.event_log_port);
+    }
+
+    void assert_second_login_is_rejected_when_session_is_already_active() {
+        auto setup = create_usecase_with_existing_user_and_recording_ports(true);
+        EXPECT_THAT(
+            [&]() { setup.usecase.execute(login_scope_for_first_login().to_login_request()); },
+            testing::ThrowsMessage<domain::SessionConflictException>(testing::Eq("Session conflict"))
         );
         assert_no_side_effects(*setup.session_port, *setup.event_log_port);
     }
@@ -113,8 +129,8 @@ private:
         const CapturingAuthEventLogPortForAuthStatements* event_log_port;
     };
 
-    ExistingUserUsecaseSetup create_usecase_with_existing_user_and_recording_ports() const {
-        auto session_port = std::make_unique<RecordingSessionPortForAuthStatements>();
+    ExistingUserUsecaseSetup create_usecase_with_existing_user_and_recording_ports(bool has_active_session = false) const {
+        auto session_port = std::make_unique<RecordingSessionPortForAuthStatements>(has_active_session);
         auto event_log_port = std::make_unique<CapturingAuthEventLogPortForAuthStatements>();
 
         const auto* captured_session_port = session_port.get();

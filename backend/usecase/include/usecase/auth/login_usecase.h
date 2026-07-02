@@ -22,6 +22,9 @@ public:
 class ISessionPort {
 public:
     virtual ~ISessionPort() = default;
+    virtual bool has_active_session_for(const std::string&) const {
+        return false;
+    }
     virtual std::string open_session_for(const std::string& username) = 0;
 };
 

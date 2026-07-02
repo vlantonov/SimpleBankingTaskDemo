@@ -23,3 +23,9 @@ TEST_F(LoginTest, returning_user_with_wrong_pin_is_rejected_and_no_session_is_cr
     SCOPED_TRACE("Scenario 3.2: Returning user with wrong PIN is rejected and no session is created");
     auth_statements_.assert_returning_user_with_wrong_pin_is_rejected_without_side_effects();
 }
+
+// TDD Red Phase - does not throw SessionConflictException and still creates side effects.
+TEST_F(LoginTest, DISABLED_second_login_while_a_session_is_already_active_is_rejected) {
+    SCOPED_TRACE("Scenario 4.1: Second login while a session is already active is rejected");
+    auth_statements_.assert_second_login_is_rejected_when_session_is_already_active();
+}

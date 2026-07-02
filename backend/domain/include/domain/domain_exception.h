@@ -22,4 +22,10 @@ public:
         : DomainException(message) {}
 };
 
+class SessionConflictException : public DomainException {
+public:
+    explicit SessionConflictException(const std::string& message)
+        : DomainException(message) {}
+};
+
 }
