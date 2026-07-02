@@ -79,7 +79,11 @@
 - [x] design (see ADR: decisions/active-session-conflict-decision.md)
 - [x] red-usecase
 - [x] green-usecase
-- [~] adapters-discovery
+- [x] adapters-discovery (http)
+- [~] red-adapter http (server TokenSessionPort does not track active sessions, so usecase conflict guard never triggers end-to-end)
+- [ ] green-adapter http (track active sessions in server-composed TokenSessionPort so second login is rejected before new side effects)
+- [ ] red-adapter http (map SessionConflictException to HTTP 409 with error body for login endpoint)
+- [ ] green-adapter http (return HTTP 409 with error="Session conflict" and empty token/message)
 - [ ] green-acceptance
 
 ### 5.1 Logout with a valid session token destroys the session
