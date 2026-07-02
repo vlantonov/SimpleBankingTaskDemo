@@ -54,6 +54,7 @@ public:
     LoginResponse execute(const domain::LoginRequest& request);
 
 private:
+    void ensure_no_active_session_for(const std::string& username) const;
     AuthUser find_or_create_user(const domain::LoginRequest& request);
     static AuthUser validate_user_credentials(const AuthUser& user, const std::string& pin);
     AuthUser create_user_and_log_event(const domain::LoginRequest& request);

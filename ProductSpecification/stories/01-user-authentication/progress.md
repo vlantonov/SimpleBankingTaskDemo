@@ -78,8 +78,8 @@
 - [x] red-acceptance
 - [x] design (see ADR: decisions/active-session-conflict-decision.md)
 - [x] red-usecase
-- [~] green-usecase
-- [ ] adapters-discovery
+- [x] green-usecase
+- [~] adapters-discovery
 - [ ] green-acceptance
 
 ### 5.1 Logout with a valid session token destroys the session

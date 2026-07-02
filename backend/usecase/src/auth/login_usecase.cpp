@@ -82,7 +82,14 @@ std::string LoginUsecase::welcome_message_for(const AuthUser& user) {
     return "Welcome, " + user.username;
 }
 
+void LoginUsecase::ensure_no_active_session_for(const std::string& username) const {
+    if (session_port_->has_active_session_for(username)) {
+        throw domain::SessionConflictException("Session conflict");
+    }
+}
+
 LoginResponse LoginUsecase::execute(const domain::LoginRequest& request) {
+    ensure_no_active_session_for(request.username_);
     const auto user = find_or_create_user(request);
     const auto token = session_port_->open_session_for(user.username);
     append_auth_event(AuthEventType::kLogin, user.username);
