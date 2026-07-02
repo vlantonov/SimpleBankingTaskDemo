@@ -149,7 +149,7 @@ TEST_F(ServerAuthEventLogRoutingTest, returning_user_with_wrong_pin_returns_401_
     EXPECT_EQ(body.value("message", "missing"), "");
 }
 
-TEST_F(ServerAuthEventLogRoutingTest, DISABLED_second_login_while_a_session_is_already_active_returns_200_instead_of_400_before_new_side_effects_are_blocked) {
+TEST_F(ServerAuthEventLogRoutingTest, second_login_while_a_session_is_already_active_returns_200_instead_of_400_before_new_side_effects_are_blocked) {
     const auto first_login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
     ASSERT_NE(first_login, nullptr) << "Connection to test server failed on first login";
     ASSERT_EQ(first_login->status, 200);
