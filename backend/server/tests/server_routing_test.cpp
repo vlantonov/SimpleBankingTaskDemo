@@ -148,7 +148,7 @@ TEST_F(ServerAuthEventLogRoutingTest, returning_user_with_wrong_pin_returns_401_
     assert_error_response(second_login, 401, "Invalid credentials");
 }
 
-TEST_F(ServerAuthEventLogRoutingTest, DISABLED_second_login_while_a_session_is_already_active_returns_409_session_conflict_before_new_side_effects_are_blocked) {
+TEST_F(ServerAuthEventLogRoutingTest, second_login_while_a_session_is_already_active_returns_409_session_conflict_before_new_side_effects_are_blocked) {
     assert_first_login_succeeds();
 
     const auto second_login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");

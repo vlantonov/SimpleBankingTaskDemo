@@ -1,7 +1,7 @@
 #pragma once
 #include <httplib.h>
 #include <functional>
-#include "domain/domain_exception.h"
+#include <string>
 
 namespace adapters::http {
 
@@ -10,10 +10,7 @@ public:
     void handle(const std::function<void()>& action, httplib::Response& res) const;
 
 private:
-    void set_invalid_credentials_error(const domain::InvalidCredentialsException& e, httplib::Response& res) const;
-    void set_validation_error(const domain::ValidationException& e, httplib::Response& res) const;
-    void set_bad_request_error(httplib::Response& res) const;
-    void set_error_response(const std::string& error, httplib::Response& res) const;
+    void set_error_response(const std::string& error, int status, httplib::Response& res) const;
 };
 
 }
