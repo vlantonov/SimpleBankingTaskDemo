@@ -84,10 +84,10 @@
 - [x] green-adapter http (track active sessions in server-composed TokenSessionPort so second login is rejected before new side effects)
 - [x] red-adapter http (map SessionConflictException to HTTP 409 with error body for login endpoint)
 - [x] green-adapter http (return HTTP 409 with error="Session conflict" and empty token/message)
-- [~] green-acceptance
+- [x] green-acceptance
 
 ### 5.1 Logout with a valid session token destroys the session
-- [ ] red-acceptance
+- [~] red-acceptance
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase

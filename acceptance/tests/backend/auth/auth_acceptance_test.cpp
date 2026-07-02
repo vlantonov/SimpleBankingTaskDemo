@@ -53,7 +53,7 @@ TEST_F(AuthTest, returning_user_with_wrong_pin_is_rejected) {
     statements_->then_login_is_rejected_with_invalid_credentials_error();
 }
 
-TEST_F(AuthTest, DISABLED_second_login_while_a_session_is_already_active_is_rejected) {
+TEST_F(AuthTest, second_login_while_a_session_is_already_active_is_rejected) {
     SCOPED_TRACE("Scenario 4.1: Second login while a session is already active is rejected");
 
     statements_->given_user_already_exists_with_pin("ola", "123");
