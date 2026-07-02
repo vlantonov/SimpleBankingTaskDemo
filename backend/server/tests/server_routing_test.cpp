@@ -29,11 +29,11 @@ httplib::Result post_login_request(int port, const std::string& payload) {
     return client.Post("/api/v1/login", payload, "application/json");
 }
 
-void assert_validation_error_response(const httplib::Result& response) {
+void assert_400_error_response(const httplib::Result& response, const std::string& expected_error) {
     ASSERT_NE(response, nullptr) << "Connection to test server failed";
-    EXPECT_EQ(response->status, 400) << "Expected 400 Validation error, got " << response->status;
+    EXPECT_EQ(response->status, 400) << "Expected 400 " << expected_error << ", got " << response->status;
     const auto body = nlohmann::json::parse(response->body);
-    EXPECT_EQ(body.value("error", ""), "Validation error");
+    EXPECT_EQ(body.value("error", ""), expected_error);
     EXPECT_EQ(body.value("token", "missing"), "");
     EXPECT_EQ(body.value("message", "missing"), "");
 }
@@ -61,7 +61,7 @@ protected:
 // TDD Red Phase - configure_server is a no-op stub; POST /api/v1/login returns 404 instead of 400
 TEST_F(ServerRoutingTest, login_with_empty_username_returns_400_not_404) {
     const auto response = post_login_request(kTestPort, R"({"user":"","pin":"123"})");
-    assert_validation_error_response(response);
+    assert_400_error_response(response, "Validation error");
 }
 
 class ServerAuthEventLogRoutingTest : public ::testing::Test {
@@ -147,4 +147,17 @@ TEST_F(ServerAuthEventLogRoutingTest, returning_user_with_wrong_pin_returns_401_
     EXPECT_EQ(body.value("error", ""), "Invalid credentials");
     EXPECT_EQ(body.value("token", "missing"), "");
     EXPECT_EQ(body.value("message", "missing"), "");
+}
+
+TEST_F(ServerAuthEventLogRoutingTest, DISABLED_second_login_while_a_session_is_already_active_returns_200_instead_of_400_before_new_side_effects_are_blocked) {
+    const auto first_login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
+    ASSERT_NE(first_login, nullptr) << "Connection to test server failed on first login";
+    ASSERT_EQ(first_login->status, 200);
+
+    const auto second_login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
+    assert_400_error_response(second_login, "Bad request");
+
+    const auto log_contents = read_auth_event_log();
+    const auto parsed_events = parse_auth_event_log(log_contents);
+    assert_auth_events_written(parsed_events);
 }
