@@ -75,8 +75,8 @@
 - [x] green-acceptance
 
 ### 4.1 Second login while a session is already active is rejected
-- [~] red-acceptance
-- [ ] design
+- [x] red-acceptance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery

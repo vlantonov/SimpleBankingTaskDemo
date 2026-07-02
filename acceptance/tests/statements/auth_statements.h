@@ -64,6 +64,10 @@ public:
         then_login_is_rejected_with_error(401, "Invalid credentials");
     }
 
+    void then_login_is_rejected_with_session_conflict_error() {
+        then_login_is_rejected_with_error(409, "Session conflict");
+    }
+
     static std::string read_log_contents() {
         const auto log_path = std::filesystem::path{"auth_events.log"};
         std::ifstream log_file(log_path);
