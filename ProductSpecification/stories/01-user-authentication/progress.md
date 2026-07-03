@@ -99,9 +99,9 @@
 ### 5.2 Logout without a session token is rejected
 - [x] red-acceptance
 - [x] design (see ADR: decisions/logout-without-token-auth-error-decision.md)
-- [~] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
+- [S] red-usecase (capability exists: usecase already rejects unknown/empty tokens; missing bearer token handling belongs to HTTP boundary per ADR, so usecase files require zero changes)
+- [S] green-usecase (no usecase implementation needed; scenario 5.2 is resolved in HTTP adapter by boundary auth handling)
+- [~] adapters-discovery
 - [ ] green-acceptance
 
 ### 5.3 Logout with an invalid session token is rejected
