@@ -61,3 +61,14 @@ TEST_F(AuthTest, second_login_while_a_session_is_already_active_is_rejected) {
     statements_->when_user_logs_in("ola", "123");
     statements_->then_login_is_rejected_with_session_conflict_error();
 }
+
+TEST_F(AuthTest, DISABLED_logout_with_a_valid_session_token_destroys_the_session) {
+    SCOPED_TRACE("Scenario 5.1: Logout with a valid session token destroys the session");
+
+    statements_->given_user_already_exists_with_pin("ola", "123");
+    statements_->when_user_logs_in("ola", "123");
+    statements_->when_user_logs_out_using_the_session_token();
+    statements_->then_logout_succeeds();
+    statements_->then_session_token_is_no_longer_valid();
+    statements_->then_logout_event_is_recorded_for("ola");
+}

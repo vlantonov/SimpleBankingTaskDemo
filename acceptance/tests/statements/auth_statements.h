@@ -6,6 +6,7 @@
 #include "clients/application/application_client.h"
 #include "clients/application/dto/auth/login_request.h"
 #include "clients/application/dto/auth/login_response.h"
+#include "clients/application/dto/auth/logout_response.h"
 
 class AuthStatements {
 public:
@@ -68,6 +69,31 @@ public:
         then_login_is_rejected_with_error(409, "Session conflict");
     }
 
+    void when_user_logs_out_using_the_session_token() {
+        last_logout_response_ = client_.logout(last_response_.token);
+    }
+
+    void then_logout_succeeds() {
+        assert_logout_response(last_logout_response_, 200, "", "", "logout should succeed with valid session token");
+    }
+
+    void then_session_token_is_no_longer_valid() {
+        const auto reuse_response = client_.logout(last_response_.token);
+        assert_logout_response(
+            reuse_response,
+            401,
+            "Authentication error",
+            "",
+            "reused token must be unauthorized"
+        );
+    }
+
+    void then_logout_event_is_recorded_for(const std::string& user) {
+        const auto log_contents = read_log_contents();
+        assert_event_in_log(log_contents, "LOGOUT", "LOGOUT event must be recorded");
+        assert_event_in_log(log_contents, user, "user name must be recorded in the log");
+    }
+
     static std::string read_log_contents() {
         const auto log_path = std::filesystem::path{"auth_events.log"};
         std::ifstream log_file(log_path);
@@ -79,6 +105,16 @@ public:
     }
 
 private:
+    void assert_logout_response(const dto::auth::LogoutResponse& response,
+                                int status_code,
+                                const std::string& error,
+                                const std::string& message,
+                                const std::string& status_message) {
+        ASSERT_EQ(response.status_code, status_code) << status_message;
+        EXPECT_EQ(response.error, error) << "logout error field";
+        EXPECT_EQ(response.message, message) << "logout message field";
+    }
+
     void then_login_is_rejected_with_error(int status_code, const std::string& error) {
         EXPECT_THAT(
             last_response_,
@@ -99,4 +135,5 @@ private:
 
     ApplicationClient& client_;
     dto::auth::LoginResponse last_response_;
+    dto::auth::LogoutResponse last_logout_response_;
 };
