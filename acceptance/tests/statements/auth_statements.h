@@ -48,7 +48,11 @@ public:
     }
 
     void given_user_already_exists_with_pin(const std::string& user, const std::string& pin) {
+        client_.logout(user + "-session-token");
         when_user_logs_in(user, pin);
+        if (!last_response_.token.empty()) {
+            client_.logout(last_response_.token);
+        }
     }
 
     void then_returning_user_receives_welcome_and_token(const std::string& user) {
