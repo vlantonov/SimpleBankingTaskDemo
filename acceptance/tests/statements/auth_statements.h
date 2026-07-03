@@ -77,8 +77,22 @@ public:
         last_logout_response_ = client_.logout(last_response_.token);
     }
 
+    void when_unauthenticated_caller_attempts_to_log_out() {
+        last_logout_response_ = client_.logout_without_token();
+    }
+
     void then_logout_succeeds() {
         assert_logout_response(last_logout_response_, 200, "", "", "logout should succeed with valid session token");
+    }
+
+    void then_logout_is_rejected_with_authentication_error() {
+        assert_logout_response(
+            last_logout_response_,
+            401,
+            "Authentication error",
+            "",
+            "logout without session token must be unauthorized"
+        );
     }
 
     void then_session_token_is_no_longer_valid() {

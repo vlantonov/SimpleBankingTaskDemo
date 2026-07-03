@@ -97,8 +97,8 @@
 - [x] green-acceptance
 
 ### 5.2 Logout without a session token is rejected
-- [~] red-acceptance
-- [ ] design
+- [x] red-acceptance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery

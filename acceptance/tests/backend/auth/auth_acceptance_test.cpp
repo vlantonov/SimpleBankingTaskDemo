@@ -72,3 +72,10 @@ TEST_F(AuthTest, logout_with_a_valid_session_token_destroys_the_session) {
     statements_->then_session_token_is_no_longer_valid();
     statements_->then_logout_event_is_recorded_for("ola");
 }
+
+TEST_F(AuthTest, DISABLED_logout_without_a_session_token_is_rejected) {
+    SCOPED_TRACE("Scenario 5.2: Logout without a session token is rejected");
+
+    statements_->when_unauthenticated_caller_attempts_to_log_out();
+    statements_->then_logout_is_rejected_with_authentication_error();
+}

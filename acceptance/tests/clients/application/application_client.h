@@ -23,6 +23,12 @@ public:
         return dto::auth::LogoutResponse::parse(res->status, res->body);
     }
 
+    dto::auth::LogoutResponse logout_without_token() {
+        auto res = client_.Post("/api/v1/logout", "", "application/json");
+        if (!res) return dto::auth::LogoutResponse::connection_failed();
+        return dto::auth::LogoutResponse::parse(res->status, res->body);
+    }
+
 private:
     httplib::Client client_;
 };
