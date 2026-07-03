@@ -31,6 +31,7 @@ public:
 enum class AuthEventType {
     kUserCreated,
     kLogin,
+    kLogout,
 };
 
 struct AuthEvent {
