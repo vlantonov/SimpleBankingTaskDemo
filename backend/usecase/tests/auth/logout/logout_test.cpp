@@ -7,7 +7,7 @@ protected:
     LogoutStatements logout_statements_;
 };
 
-TEST_F(LogoutTest, DISABLED_logout_with_a_valid_session_token_destroys_the_session) {
+TEST_F(LogoutTest, logout_with_a_valid_session_token_destroys_the_session) {
     SCOPED_TRACE("Scenario 5.1: Logout with a valid session token destroys the session");
     logout_statements_.assert_logout_with_valid_session_token_destroys_the_session();
 }

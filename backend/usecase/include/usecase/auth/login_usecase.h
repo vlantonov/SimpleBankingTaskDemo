@@ -3,6 +3,7 @@
 #include <optional>
 #include <string>
 #include "domain/auth/login_request.h"
+#include "usecase/auth/auth_event_log_port.h"
 #include "usecase/auth/login_response.h"
 
 namespace usecase {
@@ -26,23 +27,6 @@ public:
         return false;
     }
     virtual std::string open_session_for(const std::string& username) = 0;
-};
-
-enum class AuthEventType {
-    kUserCreated,
-    kLogin,
-    kLogout,
-};
-
-struct AuthEvent {
-    AuthEventType type;
-    std::string username;
-};
-
-class IAuthEventLogPort {
-public:
-    virtual ~IAuthEventLogPort() = default;
-    virtual void append(const AuthEvent& event) = 0;
 };
 
 class LoginUsecase {

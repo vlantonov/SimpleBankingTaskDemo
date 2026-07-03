@@ -3,7 +3,7 @@
 #include <optional>
 #include <string>
 #include "domain/auth/logout_request.h"
-#include "usecase/auth/login_usecase.h"
+#include "usecase/auth/auth_event_log_port.h"
 
 namespace usecase {
 
