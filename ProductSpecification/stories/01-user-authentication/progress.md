@@ -102,8 +102,8 @@
 - [S] red-usecase (capability exists: usecase already rejects unknown/empty tokens; missing bearer token handling belongs to HTTP boundary per ADR, so usecase files require zero changes)
 - [S] green-usecase (no usecase implementation needed; scenario 5.2 is resolved in HTTP adapter by boundary auth handling)
 - [x] adapters-discovery (http)
-- [~] red-adapter http (missing/invalid Authorization currently flows into LogoutRequest validation and returns HTTP 400; scenario requires HTTP 401 authentication error)
-- [ ] green-adapter http (handle missing/invalid bearer token at LogoutController boundary and return HTTP 401 Authentication error before request validation)
+- [x] red-adapter http (missing/invalid Authorization currently flows into LogoutRequest validation and returns HTTP 400; scenario requires HTTP 401 authentication error)
+- [~] green-adapter http (handle missing/invalid bearer token at LogoutController boundary and return HTTP 401 Authentication error before request validation)
 - [ ] green-acceptance
 
 ### 5.3 Logout with an invalid session token is rejected
