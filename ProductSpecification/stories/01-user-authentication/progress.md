@@ -98,8 +98,8 @@
 
 ### 5.2 Logout without a session token is rejected
 - [x] red-acceptance
-- [~] design
-- [ ] red-usecase
+- [x] design (see ADR: decisions/logout-without-token-auth-error-decision.md)
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
