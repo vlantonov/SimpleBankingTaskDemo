@@ -36,6 +36,12 @@ httplib::Result post_login_request(int port, const std::string& payload) {
     return client.Post("/api/v1/login", payload, "application/json");
 }
 
+httplib::Result post_logout_request(int port, const std::string& token) {
+    httplib::Client client("127.0.0.1", port);
+    httplib::Headers headers{{"Authorization", "Bearer " + token}};
+    return client.Post("/api/v1/logout", headers, "", "application/json");
+}
+
 void assert_error_response(const httplib::Result& response, int expected_status, const std::string& expected_error) {
     ASSERT_NE(response, nullptr) << "Connection to test server failed";
     EXPECT_EQ(response->status, expected_status)
@@ -110,6 +116,12 @@ protected:
         EXPECT_EQ(parsed_events[1], (ParsedAuthEvent{"LOGIN", "ola"}));
     }
 
+    static void assert_auth_events_written_with_logout(const std::vector<ParsedAuthEvent>& parsed_events) {
+        ASSERT_EQ(parsed_events.size(), 3u);
+        assert_auth_events_written(parsed_events);
+        EXPECT_EQ(parsed_events[2], (ParsedAuthEvent{"LOGOUT", "ola"}));
+    }
+
     static std::vector<ParsedAuthEvent> parse_auth_event_log(const std::string& log_contents) {
         std::vector<ParsedAuthEvent> events;
         std::istringstream stream(log_contents);
@@ -125,6 +137,17 @@ protected:
         const auto first_login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
         ASSERT_NE(first_login, nullptr) << "Connection to test server failed on first login";
         ASSERT_EQ(first_login->status, 200);
+    }
+
+    static std::string login_and_extract_token() {
+        const auto login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
+        ASSERT_NE(login, nullptr) << "Connection to test server failed";
+        ASSERT_EQ(login->status, 200);
+
+        const auto login_body = nlohmann::json::parse(login->body);
+        const auto token = login_body.value("token", "");
+        EXPECT_FALSE(token.empty()) << "Login response token missing";
+        return token;
     }
 
     httplib::Server server_;
@@ -157,4 +180,17 @@ TEST_F(ServerAuthEventLogRoutingTest, second_login_while_a_session_is_already_ac
     const auto log_contents = read_auth_event_log();
     const auto parsed_events = parse_auth_event_log(log_contents);
     assert_auth_events_written(parsed_events);
+}
+
+// TDD Red Phase - POST /api/v1/logout is not wired; status is 404 instead of 200
+TEST_F(ServerAuthEventLogRoutingTest, DISABLED_logout_with_valid_session_token_returns_200_and_records_logout_event) {
+    const auto token = login_and_extract_token();
+
+    const auto logout = post_logout_request(kTestPort, token);
+    ASSERT_NE(logout, nullptr) << "Connection to test server failed";
+    ASSERT_EQ(logout->status, 200);
+
+    const auto log_contents = read_auth_event_log();
+    const auto parsed_events = parse_auth_event_log(log_contents);
+    assert_auth_events_written_with_logout(parsed_events);
 }
