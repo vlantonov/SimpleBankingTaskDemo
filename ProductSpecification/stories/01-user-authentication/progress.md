@@ -88,8 +88,8 @@
 
 ### 5.1 Logout with a valid session token destroys the session
 - [x] red-acceptance
-- [~] design
-- [ ] red-usecase
+- [x] design
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
