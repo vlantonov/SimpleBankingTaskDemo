@@ -33,7 +33,7 @@ protected:
     LogoutControllerStatements statements_{controller_};
 };
 
-TEST_F(LogoutControllerTest, DISABLED_logout_without_session_token_is_rejected_with_authentication_error) {
+TEST_F(LogoutControllerTest, logout_without_session_token_is_rejected_with_authentication_error) {
     SCOPED_TRACE("Scenario 5.2: HTTP adapter - logout without token returns 401 Authentication error");
 
     statements_.when_logout_requested_without_authorization();
