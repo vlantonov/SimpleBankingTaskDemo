@@ -1,5 +1,6 @@
 add_library(adapter_http
     src/auth/login_controller.cpp
+    src/auth/logout_controller.cpp
     src/exception_handler.cpp
 )
 target_include_directories(adapter_http PUBLIC include)

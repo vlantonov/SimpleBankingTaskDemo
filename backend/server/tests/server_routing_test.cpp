@@ -72,7 +72,6 @@ protected:
     std::thread server_thread_;
 };
 
-// TDD Red Phase - configure_server is a no-op stub; POST /api/v1/login returns 404 instead of 400
 TEST_F(ServerRoutingTest, login_with_empty_username_returns_400_not_404) {
     const auto response = post_login_request(kTestPort, R"({"user":"","pin":"123"})");
     assert_error_response(response, 400, "Validation error");
@@ -118,7 +117,8 @@ protected:
 
     static void assert_auth_events_written_with_logout(const std::vector<ParsedAuthEvent>& parsed_events) {
         ASSERT_EQ(parsed_events.size(), 3u);
-        assert_auth_events_written(parsed_events);
+        EXPECT_EQ(parsed_events[0], (ParsedAuthEvent{"USER_CREATED", "ola"}));
+        EXPECT_EQ(parsed_events[1], (ParsedAuthEvent{"LOGIN", "ola"}));
         EXPECT_EQ(parsed_events[2], (ParsedAuthEvent{"LOGOUT", "ola"}));
     }
 
@@ -141,8 +141,14 @@ protected:
 
     static std::string login_and_extract_token() {
         const auto login = post_login_request(kTestPort, R"({"user":"ola","pin":"123"})");
-        ASSERT_NE(login, nullptr) << "Connection to test server failed";
-        ASSERT_EQ(login->status, 200);
+        if (login == nullptr) {
+            ADD_FAILURE() << "Connection to test server failed";
+            return "";
+        }
+        if (login->status != 200) {
+            ADD_FAILURE() << "Expected login status 200 but was " << login->status;
+            return "";
+        }
 
         const auto login_body = nlohmann::json::parse(login->body);
         const auto token = login_body.value("token", "");
@@ -182,10 +188,8 @@ TEST_F(ServerAuthEventLogRoutingTest, second_login_while_a_session_is_already_ac
     assert_auth_events_written(parsed_events);
 }
 
-// TDD Red Phase - POST /api/v1/logout is not wired; status is 404 instead of 200
-TEST_F(ServerAuthEventLogRoutingTest, DISABLED_logout_with_valid_session_token_returns_200_and_records_logout_event) {
+TEST_F(ServerAuthEventLogRoutingTest, logout_with_valid_session_token_returns_200_and_records_logout_event) {
     const auto token = login_and_extract_token();
-
     const auto logout = post_logout_request(kTestPort, token);
     ASSERT_NE(logout, nullptr) << "Connection to test server failed";
     ASSERT_EQ(logout->status, 200);

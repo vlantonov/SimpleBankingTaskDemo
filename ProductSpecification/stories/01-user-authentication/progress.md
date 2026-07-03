@@ -93,8 +93,8 @@
 - [x] green-usecase
 - [x] adapters-discovery (http)
 - [x] red-adapter http (no inbound logout endpoint wiring: POST /api/v1/logout is not registered and cannot invoke LogoutUsecase)
-- [~] green-adapter http (wire logout endpoint/controller and server composition to return expected 200 logout response and persist LOGOUT event)
-- [ ] green-acceptance
+- [x] green-adapter http (wire logout endpoint/controller and server composition to return expected 200 logout response and persist LOGOUT event)
+- [~] green-acceptance
 
 ### 5.2 Logout without a session token is rejected
 - [ ] red-acceptance
