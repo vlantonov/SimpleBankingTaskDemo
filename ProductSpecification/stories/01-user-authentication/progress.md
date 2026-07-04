@@ -106,10 +106,10 @@
 - [x] green-adapter http (handle missing/invalid bearer token at LogoutController boundary and return HTTP 401 Authentication error before request validation)
 - [x] red-adapter http (coverage: malformed Authorization bearer variants return HTTP 401)
 - [x] green-adapter http (coverage: malformed Authorization bearer variants return HTTP 401)
-- [~] green-acceptance
+- [x] green-acceptance
 
 ### 5.3 Logout with an invalid session token is rejected
-- [ ] red-acceptance
+- [~] red-acceptance
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase
