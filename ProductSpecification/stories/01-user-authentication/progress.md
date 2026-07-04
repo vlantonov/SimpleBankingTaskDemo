@@ -105,8 +105,8 @@
 - [x] red-adapter http (missing/invalid Authorization currently flows into LogoutRequest validation and returns HTTP 400; scenario requires HTTP 401 authentication error)
 - [x] green-adapter http (handle missing/invalid bearer token at LogoutController boundary and return HTTP 401 Authentication error before request validation)
 - [x] red-adapter http (coverage: malformed Authorization bearer variants return HTTP 401)
-- [~] green-adapter http (coverage: malformed Authorization bearer variants return HTTP 401)
-- [ ] green-acceptance
+- [x] green-adapter http (coverage: malformed Authorization bearer variants return HTTP 401)
+- [~] green-acceptance
 
 ### 5.3 Logout with an invalid session token is rejected
 - [ ] red-acceptance

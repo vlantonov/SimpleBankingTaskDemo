@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <functional>
 #include <memory>
 #include <unordered_map>
 #include "adapters/http/auth/logout_controller.h"
@@ -52,7 +53,7 @@ protected:
             std::make_unique<FakeAuthEventLogPort>());
     }
 
-    auto active_session_initializer() {
+    std::function<void(const std::string&, const std::string&)> active_session_initializer() {
         return [this](const std::string& token, const std::string& username) {
             fake_logout_session_port_->given_active_session(token, username);
         };
@@ -72,17 +73,9 @@ TEST_F(LogoutControllerTest, logout_without_session_token_is_rejected_with_authe
     statements_->assert_authentication_error_response();
 }
 
-TEST_F(LogoutControllerTest, DISABLED_logout_with_malformed_authorization_bearer_variants_is_rejected_with_authentication_error) {
+TEST_F(LogoutControllerTest, logout_with_malformed_authorization_bearer_variants_is_rejected_with_authentication_error) {
     SCOPED_TRACE("Scenario 5.2 coverage: malformed Authorization bearer variants return HTTP 401");
 
     statements_->given_active_session("active.header.signature", "demo-user");
-
-    statements_->when_logout_requested_with_wrong_authorization_prefix();
-    statements_->assert_authentication_error_response();
-
-    statements_->when_logout_requested_with_empty_bearer_payload();
-    statements_->assert_authentication_error_response();
-
-    statements_->when_logout_requested_with_internal_bearer_suffix_variant();
-    statements_->assert_authentication_error_response();
+    statements_->assert_malformed_authorization_bearer_variants_are_rejected();
 }

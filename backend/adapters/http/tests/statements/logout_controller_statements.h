@@ -40,6 +40,17 @@ public:
         assert_json_response(*response_, 401, expected_body);
     }
 
+    void assert_malformed_authorization_bearer_variants_are_rejected() {
+        when_logout_requested_with_wrong_authorization_prefix();
+        assert_authentication_error_response();
+
+        when_logout_requested_with_empty_bearer_payload();
+        assert_authentication_error_response();
+
+        when_logout_requested_with_internal_bearer_suffix_variant();
+        assert_authentication_error_response();
+    }
+
 private:
     void assert_json_response(const httplib::Response& response, int expected_status, const nlohmann::json& expected_body) {
         EXPECT_EQ(response.status, expected_status) << "status code";

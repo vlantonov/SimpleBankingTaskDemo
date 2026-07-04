@@ -27,7 +27,7 @@ bool has_bearer_prefix(std::string_view auth_header) {
 
 std::string to_internal_token(const std::string& token) {
     if (!has_external_token_suffix(token)) {
-        return token;
+        return "";
     }
 
     return token.substr(0, token.size() - kExternalTokenSuffix.size()) + std::string{kInternalTokenSuffix};
