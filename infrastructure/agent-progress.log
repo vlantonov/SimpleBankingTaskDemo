@@ -1,5 +1,2 @@
-
-[22:57:53] [red-agent] START: Scenario 3.2 - Returning user with wrong PIN is rejected
-[22:58:21] [red-agent] PREDICT: Expecting AssertionError - PIN validation not implemented yet, system will accept wrong PIN and return 200 OK with token instead of rejecting with 401
-[22:59:36] [red-agent] RUN: Test executed - 1 test failed, 0 passed (as predicted)
-[22:59:48] [red-agent] DONE: Test files updated - auth_acceptance_test.cpp + auth_statements.h
+[21:15:00] design START: S1.1 repeated failed login attempts
+[21:15:10] design DONE: S1.1 rate-limit design recorded

@@ -113,6 +113,19 @@ public:
         assert_no_side_effects(*setup.session_port, *setup.event_log_port);
     }
 
+    void assert_repeated_failed_login_attempts_are_rate_limited() {
+        auto setup = create_usecase_with_existing_user_and_recording_ports();
+        EXPECT_THAT(
+            [&]() {
+                for (int attempt = 0; attempt < 6; ++attempt) {
+                    setup.usecase.execute(login_scope_for_existing_user_with_wrong_pin().to_login_request());
+                }
+            },
+            testing::ThrowsMessage<domain::RateLimitException>(testing::Eq("Too many requests"))
+        );
+        assert_no_side_effects(*setup.session_port, *setup.event_log_port);
+    }
+
     void assert_second_login_is_rejected_when_session_is_already_active() {
         auto setup = create_usecase_with_existing_user_and_recording_ports(true);
         EXPECT_THAT(
