@@ -160,7 +160,12 @@
 - [x] design (reuse the existing LoginRequest domain validation boundary; extend it to reject usernames above the max length, keep ValidationException mapping to HTTP 400, and avoid new ports or controller-specific rules)
 - [x] red-usecase (new failing regression proves the LoginUsecase accepts a 257-character username instead of throwing ValidationException)
 - [x] green-usecase (domain validation now rejects usernames above 256 chars before the usecase executes)
-- [ ] adapters-discovery
+- [x] adapters-discovery
+  - Check 1 (ports): http adapter — LoginController already invokes LoginUsecase without any new port or storage requirement; the validation occurs upstream in domain::LoginRequest before the usecase calls its ports.
+  - Check 2 (exceptions): LoginController/ExceptionHandler — [S] ValidationException is already mapped to HTTP 400 with error="Validation error" in the HTTP boundary.
+  - Check 3 (response shape): LoginController — [S] the login error response already returns the expected JSON body shape with error/token/message fields for ValidationException, so no response-shape change is needed.
+- [S] red-adapter http (no new HTTP adapter behavior: LoginController and ExceptionHandler already convert ValidationException into HTTP 400)
+- [S] green-adapter http (no adapter implementation change required; the long-username guard is enforced before the HTTP layer executes)
 - [ ] green-acceptance
 
 ### S3.2 Excessively long PIN is rejected

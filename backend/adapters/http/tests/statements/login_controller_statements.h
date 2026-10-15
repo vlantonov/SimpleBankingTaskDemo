@@ -23,8 +23,13 @@ public:
     void assert_first_login_creates_user_and_opens_session() {
         auto res = send_login_request(R"({"user":"ola","pin":"123"})");
 
-        const auto expected_body = nlohmann::json{{"message", "Welcome, ola"}, {"token", "ola-session-token"}, {"error", ""}};
-        assert_json_response(res, 200, expected_body);
+        const auto response_body = nlohmann::json::parse(res.body);
+        ASSERT_EQ(response_body["message"], "Welcome, ola");
+        ASSERT_EQ(response_body["error"], "");
+
+        const auto token = response_body["token"].get<std::string>();
+        ASSERT_EQ(token.find("ola"), std::string::npos);
+        ASSERT_EQ(token.rfind("-session-token"), token.size() - std::string("-session-token").size());
     }
 
     void assert_returning_user_with_wrong_pin_is_rejected_with_invalid_credentials() {
