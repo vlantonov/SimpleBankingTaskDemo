@@ -3,6 +3,7 @@
 #include <gmock/gmock.h>
 #include <memory>
 #include <random>
+#include <string>
 #include <vector>
 #include "usecase/auth/login_usecase.h"
 #include "domain/domain_exception.h"
@@ -54,6 +55,11 @@ public:
     explicit AuthStatements(usecase::LoginUsecase& login_usecase): login_usecase_(login_usecase) {}
     void assert_login_rejected_with_validation_error() {
         EXPECT_THAT([&]() { login_usecase_.execute(login_scope_with_empty_username().to_login_request()); }, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Validation error")));
+    }
+    void assert_login_with_overly_long_username_is_rejected() {
+        const auto long_username = std::string(257, 'a');
+        const domain::LoginRequest request{long_username, "123"};
+        EXPECT_THAT([&]() { login_usecase_.execute(request); }, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Validation error")));
     }
     void assert_first_login_creates_user_and_opens_session() {
         const auto response = login_usecase_.execute(login_scope_for_first_login().to_login_request());

@@ -8,6 +8,11 @@ TEST_F(LoginTest, login_with_empty_username_is_rejected) {
     auth_statements_.assert_login_rejected_with_validation_error();
 }
 
+TEST_F(LoginTest, overly_long_username_is_rejected) {
+    SCOPED_TRACE("Scenario S3.1: Overly long username is rejected");
+    auth_statements_.assert_login_with_overly_long_username_is_rejected();
+}
+
 // TDD Red Phase - C++ exception with description "Not implemented" thrown in the test body.
 TEST_F(LoginTest, first_login_creates_the_user_and_opens_a_session) {
     SCOPED_TRACE("Scenario 2.1: First login creates the user and opens a session");
