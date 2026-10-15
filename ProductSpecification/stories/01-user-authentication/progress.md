@@ -166,7 +166,7 @@
   - Check 3 (response shape): LoginController — [S] the login error response already returns the expected JSON body shape with error/token/message fields for ValidationException, so no response-shape change is needed.
 - [S] red-adapter http (no new HTTP adapter behavior: LoginController and ExceptionHandler already convert ValidationException into HTTP 400)
 - [S] green-adapter http (no adapter implementation change required; the long-username guard is enforced before the HTTP layer executes)
-- [ ] green-acceptance
+- [x] green-acceptance (live backend rejects overlong usernames with HTTP 400 and error="Validation error")
 
 ### S3.2 Excessively long PIN is rejected
 - [ ] red-acceptance

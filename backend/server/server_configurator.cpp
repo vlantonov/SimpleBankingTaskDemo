@@ -20,7 +20,11 @@ class InMemoryUserPort final : public usecase::IUserPort {
 public:
     explicit InMemoryUserPort(std::shared_ptr<AuthState> state): state_(std::move(state)) {}
     std::optional<usecase::AuthUser> find_by_username(const std::string& username) const override {
-        const auto it = state_->users.find(username); return it == state_->users.end() ? std::nullopt : it->second;
+        const auto it = state_->users.find(username);
+        if (it == state_->users.end()) {
+            return std::nullopt;
+        }
+        return std::optional<usecase::AuthUser>{it->second};
     }
     usecase::AuthUser create(const std::string& username, const std::string& pin) override {
         const auto user = usecase::AuthUser{username, pin}; state_->users[username] = user; return user;
@@ -49,7 +53,11 @@ public:
         username_by_token_[token] = username; return token;
     }
     std::optional<std::string> find_username_by_token(const std::string& token) const override {
-        const auto it = username_by_token_.find(token); return it == username_by_token_.end() ? std::nullopt : it->second;
+        const auto it = username_by_token_.find(token);
+        if (it == username_by_token_.end()) {
+            return std::nullopt;
+        }
+        return std::optional<std::string>{it->second};
     }
     void close_session(const std::string& token) override {
         const auto it = username_by_token_.find(token); if (it == username_by_token_.end()) return;
