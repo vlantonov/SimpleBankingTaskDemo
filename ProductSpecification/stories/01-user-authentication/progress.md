@@ -128,7 +128,7 @@
   - Check 2 (exceptions): LoginController/ExceptionHandler — RateLimitException is not yet mapped to HTTP 429, so the login boundary still needs explicit throttling error handling
   - Check 3 (response shape): LoginController — the success response shape is already correct for valid logins, but the throttled path still needs an error body with error="Too many requests" and the correct 429 status
 - [x] red-adapter http (real HTTP validation: actual 401 Invalid credentials, expected 429 Too many requests; the controller/exception handler still treats the threshold breach as invalid credentials)
-- [~] green-adapter http (map RateLimitException to HTTP 429 with error="Too many requests" and preserve the login success response shape for valid requests)
+- [x] green-adapter http (map RateLimitException to HTTP 429 with error="Too many requests" and preserve the login success response shape for valid requests)
 - [ ] green-acceptance
 
 ### S2.1 Session token is not reusable after logout

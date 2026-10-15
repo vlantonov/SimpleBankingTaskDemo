@@ -7,6 +7,8 @@ namespace adapters::http {
 void ExceptionHandler::handle(const std::function<void()>& action, httplib::Response& res) const {
     try {
         action();
+    } catch (const domain::RateLimitException& e) {
+        set_error_response(e.what(), 429, res);
     } catch (const domain::InvalidCredentialsException& e) {
         set_error_response(e.what(), 401, res);
     } catch (const domain::SessionConflictException& e) {
