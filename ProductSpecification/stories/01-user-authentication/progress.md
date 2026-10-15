@@ -159,7 +159,7 @@
 - [x] red-acceptance (failing acceptance reproduces the issue: the long-name login currently returns HTTP 200 instead of HTTP 400 Validation error)
 - [x] design (reuse the existing LoginRequest domain validation boundary; extend it to reject usernames above the max length, keep ValidationException mapping to HTTP 400, and avoid new ports or controller-specific rules)
 - [x] red-usecase (new failing regression proves the LoginUsecase accepts a 257-character username instead of throwing ValidationException)
-- [ ] green-usecase
+- [x] green-usecase (domain validation now rejects usernames above 256 chars before the usecase executes)
 - [ ] adapters-discovery
 - [ ] green-acceptance
 

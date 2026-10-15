@@ -58,8 +58,11 @@ public:
     }
     void assert_login_with_overly_long_username_is_rejected() {
         const auto long_username = std::string(257, 'a');
-        const domain::LoginRequest request{long_username, "123"};
-        EXPECT_THAT([&]() { login_usecase_.execute(request); }, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Validation error")));
+        const auto invalid_login = [&]() {
+            const domain::LoginRequest request{long_username, "123"};
+            login_usecase_.execute(request);
+        };
+        EXPECT_THAT(invalid_login, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Validation error")));
     }
     void assert_first_login_creates_user_and_opens_session() {
         const auto response = login_usecase_.execute(login_scope_for_first_login().to_login_request());
