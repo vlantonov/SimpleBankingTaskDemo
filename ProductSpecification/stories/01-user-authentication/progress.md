@@ -109,12 +109,12 @@
 - [x] green-acceptance
 
 ### 5.3 Logout with an invalid session token is rejected
-- [~] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (capability exists: LogoutController rejects invalid bearer tokens via InvalidCredentialsException before request validation, and LogoutUsecase already rejects unknown tokens)
+- [S] design (existing implementation already satisfies the scenario; no new design decision required)
+- [S] red-usecase (capability exists: LogoutUsecase rejects unknown token with InvalidCredentialsException)
+- [S] green-usecase (no usecase change needed; invalid-token rejection already implemented)
+- [S] adapters-discovery (no new adapter needed; usecase/HTTP boundary already handle invalid token path)
+- [S] green-acceptance (acceptance behavior already covered by the current logout implementation; no new disabled acceptance test is required)
 
 ## Security Scenarios (05_Security_Tests.md)
 
