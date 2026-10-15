@@ -140,12 +140,12 @@
 - [S] green-acceptance (existing acceptance test covers the same behavior through the valid logout/reuse flow)
 
 ### S2.2 Session token is sufficiently random
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [x] red-acceptance (failing acceptance check added and disabled after red validation: current tokens are username-derived, with values like "ola-session-token" and "bob-session-token" containing the user names)
+- [x] design (secure random token: generate a non-user-derived session identifier, keep the existing internal/external token translation, and validate it with distinct-user login checks)
+- [x] red-usecase (session token generation is intentionally random and must not include the username; the usecase assertions now assert the token contract instead of a literal username-derived value)
+- [x] green-usecase (generate a random, non-sequential token in the session port and keep the session map keyed by the random value)
+- [x] adapters-discovery (no extra adapter ports required; the change is confined to session token generation and the existing login/logout mapping)
+- [x] green-acceptance
 
 ### S2.3 An arbitrary token cannot access a protected endpoint
 - [ ] red-acceptance

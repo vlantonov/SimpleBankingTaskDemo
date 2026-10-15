@@ -1,10 +1,20 @@
 #include "usecase/auth/login_usecase.h"
 #include "domain/domain_exception.h"
+#include <iomanip>
+#include <random>
+#include <sstream>
 #include <unordered_map>
 
 namespace usecase {
 
 namespace {
+
+std::string generate_session_token() {
+    static thread_local std::mt19937_64 generator{std::random_device{}()};
+    std::ostringstream stream;
+    stream << std::hex << std::setw(16) << std::setfill('0') << generator();
+    return stream.str() + ".header.signature";
+}
 
 class FirstLoginUserPort final : public IUserPort {
 public:
@@ -28,8 +38,8 @@ private:
 
 class TokenSessionPort final : public ISessionPort {
 public:
-    std::string open_session_for(const std::string& username) override {
-        return username + ".header.signature";
+    std::string open_session_for(const std::string&) override {
+        return generate_session_token();
     }
 };
 

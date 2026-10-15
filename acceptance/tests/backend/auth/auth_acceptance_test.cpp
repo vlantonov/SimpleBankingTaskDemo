@@ -81,6 +81,25 @@ TEST_F(AuthTest, logout_without_a_session_token_is_rejected) {
     statements_->then_logout_is_rejected_with_authentication_error();
 }
 
+TEST_F(AuthTest, session_tokens_for_independent_logins_are_unique_and_not_derived_from_username) {
+    SCOPED_TRACE("Scenario S2.2: Session token is sufficiently random");
+
+    const auto suffix = std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
+    const auto first_user = std::string{"random_token_user_"} + suffix;
+    const auto second_user = std::string{"random_token_user_"} + suffix + "_2";
+
+    const auto first_login = client_->login(dto::auth::LoginRequest{first_user, "123"});
+    const auto second_login = client_->login(dto::auth::LoginRequest{second_user, "123"});
+
+    ASSERT_EQ(first_login.status_code, 200) << "first independent login should succeed";
+    ASSERT_EQ(second_login.status_code, 200) << "second independent login should succeed";
+    EXPECT_NE(first_login.token, second_login.token) << "distinct logins should return distinct tokens";
+    EXPECT_THAT(first_login.token, testing::Not(testing::HasSubstr(first_user)))
+        << "token must not be derived from the username";
+    EXPECT_THAT(second_login.token, testing::Not(testing::HasSubstr(second_user)))
+        << "token must not be derived from the username";
+}
+
 TEST_F(AuthTest, repeated_failed_login_attempts_are_rate_limited) {
     SCOPED_TRACE("Scenario S1.1: Repeated failed login attempts are rate-limited");
 
