@@ -120,7 +120,7 @@
 
 ### S1.1 Repeated failed login attempts are rate-limited
 - [x] red-acceptance (failing acceptance check added and disabled after red validation: expected 429 Too many requests, actual 401 Invalid credentials)
-- [ ] design
+- [x] design (design: track consecutive failed login attempts per username, throttle after the configured threshold, and surface HTTP 429 with error="Too many requests" via the login controller/exception handler)
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
