@@ -22,6 +22,12 @@ public:
         : DomainException(message) {}
 };
 
+class RateLimitException : public DomainException {
+public:
+    explicit RateLimitException(const std::string& message)
+        : DomainException(message) {}
+};
+
 class SessionConflictException : public DomainException {
 public:
     explicit SessionConflictException(const std::string& message)

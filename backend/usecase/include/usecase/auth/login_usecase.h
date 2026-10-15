@@ -2,6 +2,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include "domain/auth/login_request.h"
 #include "usecase/auth/auth_event_log_port.h"
 #include "usecase/auth/login_response.h"
@@ -31,6 +32,8 @@ public:
 
 class LoginUsecase {
 public:
+    static constexpr int kFailedAttemptsBeforeRateLimit = 5;
+
     LoginUsecase();
     LoginUsecase(std::unique_ptr<IUserPort> user_port,
                  std::unique_ptr<ISessionPort> session_port,
@@ -41,7 +44,7 @@ public:
 private:
     void ensure_no_active_session_for(const std::string& username) const;
     AuthUser find_or_create_user(const domain::LoginRequest& request);
-    static AuthUser validate_user_credentials(const AuthUser& user, const std::string& pin);
+    AuthUser validate_user_credentials(const AuthUser& user, const std::string& pin);
     AuthUser create_user_and_log_event(const domain::LoginRequest& request);
     void append_auth_event(AuthEventType type, const std::string& username);
     static std::string welcome_message_for(const AuthUser& user);
@@ -49,6 +52,7 @@ private:
     std::unique_ptr<IUserPort> user_port_;
     std::unique_ptr<ISessionPort> session_port_;
     std::unique_ptr<IAuthEventLogPort> auth_event_log_port_;
+    std::unordered_map<std::string, int> consecutive_failed_attempts_by_username_;
 };
 
 }

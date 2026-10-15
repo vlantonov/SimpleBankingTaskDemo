@@ -63,8 +63,14 @@ AuthUser LoginUsecase::find_or_create_user(const domain::LoginRequest& request) 
 
 AuthUser LoginUsecase::validate_user_credentials(const AuthUser& user, const std::string& pin) {
     if (user.pin != pin) {
+        const auto failed_attempt_count = ++consecutive_failed_attempts_by_username_[user.username];
+        if (failed_attempt_count >= kFailedAttemptsBeforeRateLimit) {
+            throw domain::RateLimitException("Too many requests");
+        }
         throw domain::InvalidCredentialsException("Invalid credentials");
     }
+
+    consecutive_failed_attempts_by_username_.erase(user.username);
     return user;
 }
 

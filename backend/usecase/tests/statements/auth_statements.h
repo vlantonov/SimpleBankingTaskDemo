@@ -115,12 +115,16 @@ public:
 
     void assert_repeated_failed_login_attempts_are_rate_limited() {
         auto setup = create_usecase_with_existing_user_and_recording_ports();
+
+        for (int attempt = 0; attempt < usecase::LoginUsecase::kFailedAttemptsBeforeRateLimit - 1; ++attempt) {
+            EXPECT_THAT(
+                [&]() { setup.usecase.execute(login_scope_for_existing_user_with_wrong_pin().to_login_request()); },
+                testing::ThrowsMessage<domain::InvalidCredentialsException>(testing::Eq("Invalid credentials"))
+            );
+        }
+
         EXPECT_THAT(
-            [&]() {
-                for (int attempt = 0; attempt < 6; ++attempt) {
-                    setup.usecase.execute(login_scope_for_existing_user_with_wrong_pin().to_login_request());
-                }
-            },
+            [&]() { setup.usecase.execute(login_scope_for_existing_user_with_wrong_pin().to_login_request()); },
             testing::ThrowsMessage<domain::RateLimitException>(testing::Eq("Too many requests"))
         );
         assert_no_side_effects(*setup.session_port, *setup.event_log_port);
