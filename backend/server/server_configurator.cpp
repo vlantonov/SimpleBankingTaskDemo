@@ -45,17 +45,13 @@ public:
     explicit TokenSessionPort(std::shared_ptr<AuthState> state)
         : state_(std::move(state)) {}
 
-    void set_login_attempt(const std::string& username, const std::string& pin) {
-        pending_pins_[username] = pin;
+    void set_login_attempt(const std::string&, const std::string&) {
+        // Session conflict detection should be based on an active session, not a stale
+        // login-attempt pin snapshot that can drift across retry attempts.
     }
 
     bool has_active_session_for(const std::string& username) const override {
-        const auto active_it = active_session_pin_by_username_.find(username);
-        if (active_it == active_session_pin_by_username_.end()) {
-            return false;
-        }
-        const auto pending_it = pending_pins_.find(username);
-        return pending_it != pending_pins_.end() && pending_it->second == active_it->second;
+        return active_session_pin_by_username_.find(username) != active_session_pin_by_username_.end();
     }
 
     std::string open_session_for(const std::string& username) override {
@@ -91,7 +87,6 @@ private:
     std::shared_ptr<AuthState> state_;
     std::unordered_map<std::string, std::string> active_session_pin_by_username_;
     std::unordered_map<std::string, std::string> username_by_token_;
-    std::unordered_map<std::string, std::string> pending_pins_;
 };
 
 class SharedTokenSessionPort final : public usecase::ISessionPort {

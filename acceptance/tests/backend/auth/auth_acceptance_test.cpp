@@ -81,7 +81,7 @@ TEST_F(AuthTest, logout_without_a_session_token_is_rejected) {
     statements_->then_logout_is_rejected_with_authentication_error();
 }
 
-TEST_F(AuthTest, DISABLED_repeated_failed_login_attempts_are_rate_limited) {
+TEST_F(AuthTest, repeated_failed_login_attempts_are_rate_limited) {
     SCOPED_TRACE("Scenario S1.1: Repeated failed login attempts are rate-limited");
 
     const auto user = "rate_limited_user_" + std::to_string(
