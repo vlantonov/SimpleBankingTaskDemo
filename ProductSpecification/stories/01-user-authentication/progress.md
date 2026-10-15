@@ -122,8 +122,8 @@
 - [x] red-acceptance (failing acceptance check added and disabled after red validation: expected 429 Too many requests, actual 401 Invalid credentials)
 - [x] design (design: track consecutive failed login attempts per username, throttle after the configured threshold, and surface HTTP 429 with error="Too many requests" via the login controller/exception handler)
 - [x] red-usecase (refactor review: implementation intentionally missing; keep the scope test-only, preserve the strict assertion pattern, and do not introduce speculative production refactor before green implementation)
-- [~] green-usecase
-- [ ] adapters-discovery
+- [x] green-usecase
+- [~] adapters-discovery
 - [ ] green-acceptance
 
 ### S2.1 Session token is not reusable after logout
