@@ -156,8 +156,8 @@
 - [S] green-acceptance (existing logout path rejects fabricated tokens with HTTP 401 before any action executes)
 
 ### S3.1 Excessively long username is rejected
-- [ ] red-acceptance
-- [ ] design
+- [x] red-acceptance (failing acceptance reproduces the issue: the long-name login currently returns HTTP 200 instead of HTTP 400 Validation error)
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
