@@ -123,7 +123,12 @@
 - [x] design (design: track consecutive failed login attempts per username, throttle after the configured threshold, and surface HTTP 429 with error="Too many requests" via the login controller/exception handler)
 - [x] red-usecase (refactor review: implementation intentionally missing; keep the scope test-only, preserve the strict assertion pattern, and do not introduce speculative production refactor before green implementation)
 - [x] green-usecase
-- [~] adapters-discovery
+- [x] adapters-discovery
+  - Check 1 (ports): http adapter — existing server composition already wires LoginUsecase to InMemoryUserPort and TokenSessionPort; no new port adapter is required
+  - Check 2 (exceptions): LoginController/ExceptionHandler — RateLimitException is not yet mapped to HTTP 429, so the login boundary still needs explicit throttling error handling
+  - Check 3 (response shape): LoginController — the success response shape is already correct for valid logins, but the throttled path still needs an error body with error="Too many requests" and the correct 429 status
+- [~] red-adapter http (map RateLimitException to HTTP 429 with error="Too many requests" and ensure no session is created on throttle)
+- [ ] green-adapter http (return the rate-limit error body while preserving the happy-path login response shape for successful requests)
 - [ ] green-acceptance
 
 ### S2.1 Session token is not reusable after logout
