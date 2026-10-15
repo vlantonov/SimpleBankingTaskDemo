@@ -157,8 +157,8 @@
 
 ### S3.1 Excessively long username is rejected
 - [x] red-acceptance (failing acceptance reproduces the issue: the long-name login currently returns HTTP 200 instead of HTTP 400 Validation error)
-- [~] design
-- [ ] red-usecase
+- [x] design (reuse the existing LoginRequest domain validation boundary; extend it to reject usernames above the max length, keep ValidationException mapping to HTTP 400, and avoid new ports or controller-specific rules)
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance

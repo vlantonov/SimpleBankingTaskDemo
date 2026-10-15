@@ -5,3 +5,4 @@
 [22:49:34] test-review-agent DONE no issues found
 [22:49:34] refactor-agent START no structural cleanup needed
 [22:49:34] refactor-agent DONE no refactor required
+[23:02:06] design-preview REVIEW: reuse LoginRequest validation boundary, reject username >256 chars, ValidationException->400
