@@ -69,6 +69,17 @@ public:
         then_login_is_rejected_with_error(401, "Invalid credentials");
     }
 
+    void when_user_submits_multiple_failed_login_attempts_for(const std::string& user, int attempts) {
+        for (int i = 0; i < attempts; ++i) {
+            last_response_ = client_.login(dto::auth::LoginRequest{user, "wrong-pin"});
+        }
+    }
+
+    void then_failed_login_attempts_for_user_are_throttled() {
+        EXPECT_EQ(last_response_.status_code, 429) << "repeated failed login attempts should be throttled";
+        EXPECT_EQ(last_response_.error, "Too many requests") << "rate-limited responses should report throttling";
+    }
+
     void then_login_is_rejected_with_session_conflict_error() {
         then_login_is_rejected_with_error(409, "Session conflict");
     }

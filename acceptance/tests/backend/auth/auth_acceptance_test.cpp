@@ -1,3 +1,4 @@
+#include <chrono>
 #include <gtest/gtest.h>
 #include "backend/backend_test_fixture.h"
 #include "clients/application/application_client.h"
@@ -78,4 +79,15 @@ TEST_F(AuthTest, logout_without_a_session_token_is_rejected) {
 
     statements_->when_unauthenticated_caller_attempts_to_log_out();
     statements_->then_logout_is_rejected_with_authentication_error();
+}
+
+TEST_F(AuthTest, DISABLED_repeated_failed_login_attempts_are_rate_limited) {
+    SCOPED_TRACE("Scenario S1.1: Repeated failed login attempts are rate-limited");
+
+    const auto user = "rate_limited_user_" + std::to_string(
+        std::chrono::steady_clock::now().time_since_epoch().count());
+
+    statements_->given_user_already_exists_with_pin(user, "123");
+    statements_->when_user_submits_multiple_failed_login_attempts_for(user, 6);
+    statements_->then_failed_login_attempts_for_user_are_throttled();
 }

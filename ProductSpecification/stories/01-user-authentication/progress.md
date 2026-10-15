@@ -119,7 +119,7 @@
 ## Security Scenarios (05_Security_Tests.md)
 
 ### S1.1 Repeated failed login attempts are rate-limited
-- [ ] red-acceptance
+- [x] red-acceptance (failing acceptance check added and disabled after red validation: expected 429 Too many requests, actual 401 Invalid credentials)
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase
