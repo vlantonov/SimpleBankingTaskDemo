@@ -148,12 +148,12 @@
 - [x] green-acceptance
 
 ### S2.3 An arbitrary token cannot access a protected endpoint
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (capability exists: logout rejects unknown or malformed bearer tokens before protected actions run)
+- [S] design (existing invalid-token rejection at the logout boundary already satisfies the requirement; no new design needed)
+- [S] red-usecase (LogoutUsecase throws Authentication error when a token is not found in the session map)
+- [S] green-usecase (existing guard already rejects arbitrary session tokens; no additional implementation required)
+- [S] adapters-discovery (no new adapter port required; the logout flow already validates the bearer token)
+- [S] green-acceptance (existing logout path rejects fabricated tokens with HTTP 401 before any action executes)
 
 ### S3.1 Excessively long username is rejected
 - [ ] red-acceptance

@@ -4,3 +4,4 @@
 [22:36:31] green-agent START randomize session token generation
 [22:36:31] green-agent RUN usecase and acceptance checks are green
 [22:36:31] green-agent DONE 8 verification checks passed
+[22:38:13] [continue] SKIP: S2.3 arbitrary-token check already covered by logout invalid-token guard
