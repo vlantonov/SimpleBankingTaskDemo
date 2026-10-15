@@ -4,7 +4,7 @@
 
 | #  | Story                         | Spec | Back | Intg | Sec | Load | Infra | Tests | %  |
 |----|-------------------------------|------|------|------|-----|------|-------|-------|----||
-| 01 | User Authentication           | ✅   | ✅    | —    | 🔧   | —    | —     | 11/20 | 55% |
+| 01 | User Authentication           | ✅   | ✅    | —    | 🔧   | —    | —     | 12/20 | 60% |
 
 # Backlog
 

@@ -132,12 +132,12 @@
 - [x] green-acceptance
 
 ### S2.1 Session token is not reusable after logout
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (capability exists: scenario 5.1 logout_with_a_valid_session_token_destroys_the_session already validates that a logged-out token is rejected on reuse)
+- [S] design (existing implementation already satisfies the requirement; no new design decision needed)
+- [S] red-usecase (capability exists: logout usecase already rejects reused/unknown tokens during session close)
+- [S] green-usecase (no additional usecase implementation required)
+- [S] adapters-discovery (no new adapter behavior needed; the logout flow already handles token invalidation at the HTTP boundary)
+- [S] green-acceptance (existing acceptance test covers the same behavior through the valid logout/reuse flow)
 
 ### S2.2 Session token is sufficiently random
 - [ ] red-acceptance
