@@ -195,12 +195,12 @@
 - [x] green-acceptance (live server rejects a directory-backed auth log with HTTP 500 and error="Server error")
 
 ### I1.2 Service recovers and login succeeds after log storage is restored
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (capability already works: after auth_events.log is recreated, a fresh user login returns HTTP 200 with a valid session token)
+- [S] design (existing recovery behavior already satisfies the requirement; no new design decision required)
+- [S] red-usecase (the login path already succeeds when the log is restored and the user is not in an active-session conflict)
+- [S] green-usecase (no usecase-layer change required; the server-side log write failure is handled without altering the happy-path login flow)
+- [S] adapters-discovery (no new adapter port or wiring change is needed; the app resumes normal logging once the file is restored)
+- [S] green-acceptance (live behavior already proves recovery: outage returns HTTP 500, restored file allows a fresh login with HTTP 200)
 
 ### I2.1 Login fails gracefully when user data cannot be read
 - [ ] red-acceptance

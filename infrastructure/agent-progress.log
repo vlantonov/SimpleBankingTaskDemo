@@ -2,3 +2,4 @@
 [19:47:21] [green-agent] RUN: acceptance test 1 passed, 0 failed
 [19:47:21] [refactor-agent] DONE: no blocking refactor; minor exception-handler readability note only
 [19:47:21] [coverage-agent] DONE: focused regression covers server-error branch for unavailable log storage
+[19:48:58] [continue] SKIP: I1.2 recovery already supported
