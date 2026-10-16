@@ -13,6 +13,8 @@ void ExceptionHandler::handle(const std::function<void()>& action, httplib::Resp
         set_error_response(e.what(), 401, res);
     } catch (const domain::SessionConflictException& e) {
         set_error_response(e.what(), 409, res);
+    } catch (const domain::ServerErrorException& e) {
+        set_error_response(e.what(), 500, res);
     } catch (const domain::ValidationException& e) {
         set_error_response(e.what(), 400, res);
     } catch (const std::exception&) {

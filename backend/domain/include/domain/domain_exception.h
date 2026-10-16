@@ -34,4 +34,10 @@ public:
         : DomainException(message) {}
 };
 
+class ServerErrorException : public DomainException {
+public:
+    explicit ServerErrorException(const std::string& message)
+        : DomainException(message) {}
+};
+
 }

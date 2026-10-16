@@ -2,6 +2,7 @@
 #include "adapters/http/auth/login_controller.h"
 #include "adapters/http/auth/logout_controller.h"
 #include "adapters/http/exception_handler.h"
+#include "domain/domain_exception.h"
 #include "usecase/auth/login_usecase.h"
 #include "usecase/auth/logout_usecase.h"
 #include <fstream>
@@ -86,7 +87,16 @@ private:
 };
 class FileAuthEventLogPort final : public usecase::IAuthEventLogPort {
 public:
-    void append(const usecase::AuthEvent& event) override { std::ofstream output{"auth_events.log", std::ios::app}; output << to_event_type(event.type) << " " << event.username << "\n"; }
+    void append(const usecase::AuthEvent& event) override {
+        std::ofstream output{"auth_events.log", std::ios::app};
+        if (!output.is_open()) {
+            throw domain::ServerErrorException{"Server error"};
+        }
+        output << to_event_type(event.type) << " " << event.username << "\n";
+        if (!output) {
+            throw domain::ServerErrorException{"Server error"};
+        }
+    }
 private:
     static const char* to_event_type(usecase::AuthEventType type) {
         switch (type) { case usecase::AuthEventType::kUserCreated: return "USER_CREATED"; case usecase::AuthEventType::kLogin: return "LOGIN"; case usecase::AuthEventType::kLogout: return "LOGOUT"; }

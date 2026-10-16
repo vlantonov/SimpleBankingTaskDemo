@@ -188,11 +188,11 @@
 
 ### I1.1 Login fails gracefully when the log file cannot be written
 - [x] red-acceptance (failing acceptance test proves the login still returns HTTP 200 and welcome message when auth_events.log is a directory; expected HTTP 500 server error)
-- [~] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [x] design (log append failures must be treated as server-side failures and mapped to HTTP 500 before any success response is sent)
+- [S] red-usecase (the root cause is in the server log adapter, not the core login usecase; the failure path is surfaced at the HTTP boundary when the log append fails)
+- [S] green-usecase (no usecase-layer change is required; the adapter-level write failure now throws a server error that aborts login before the session is opened)
+- [x] adapters-discovery (server wiring: `LoginRuntime` composes `InMemoryUserPort`, `TokenSessionPort`, and `FileAuthEventLogPort`; the log port is the only failing side effect in this scenario)
+- [x] green-acceptance (live server rejects a directory-backed auth log with HTTP 500 and error="Server error")
 
 ### I1.2 Service recovers and login succeeds after log storage is restored
 - [ ] red-acceptance

@@ -1,9 +1,4 @@
-
-[19:41:47] [red-agent] START: I1.1 unavailable log storage
-[19:41:47] [red-agent] PREDICT: HTTP 500 Server error when auth_events.log is a directory
-[19:41:47] [red-agent] RUN: acceptance test result 0 passed, 1 failed
-[19:41:47] [red-agent] DONE: red acceptance added for log storage failure
-[19:41:47] [test-review-agent] START: I1.1 strict assertion review
-[19:41:47] [test-review-agent] DONE: exact status/error assertions accepted
-[19:41:47] [refactor-agent] START: I1.1 refactor scan
-[19:41:47] [refactor-agent] DONE: no blocking refactor required
+[19:47:21] [green-agent] START: I1.1 server-side log failure fix
+[19:47:21] [green-agent] RUN: acceptance test 1 passed, 0 failed
+[19:47:21] [refactor-agent] DONE: no blocking refactor; minor exception-handler readability note only
+[19:47:21] [coverage-agent] DONE: focused regression covers server-error branch for unavailable log storage
