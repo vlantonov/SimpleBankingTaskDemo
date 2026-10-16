@@ -4,6 +4,7 @@ add_library(adapter_http
     src/balance/balance_controller.cpp
     src/deposit/deposit_controller.cpp
     src/history/history_controller.cpp
+    src/transfer/transfer_controller.cpp
     src/withdraw/withdraw_controller.cpp
     src/exception_handler.cpp
 )
@@ -16,6 +17,7 @@ add_executable(adapter_http_tests
     tests/balance/balance_controller_test.cpp
     tests/deposit/deposit_controller_test.cpp
     tests/history/history_controller_test.cpp
+    tests/transfer/transfer_controller_test.cpp
     tests/withdraw/withdraw_controller_test.cpp
 )
 target_include_directories(adapter_http_tests PRIVATE tests)
