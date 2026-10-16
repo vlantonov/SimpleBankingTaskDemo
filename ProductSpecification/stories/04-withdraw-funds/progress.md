@@ -11,10 +11,10 @@
 - [x] design
 - [x] red-usecase
 - [x] green-usecase
-- [~] adapters-discovery (http)
-  - Check 1 (ports): http — `WithdrawUsecase` will need a session validation port and an account/ledger port, so confirm the route and adapter wiring before implementing the HTTP handler.
-  - Check 2 (exceptions): http — invalid session and insufficient funds errors must map to the required 401/400 responses, so add the adapter mapping when the usecase is in place.
-  - Check 3 (response shape): http — the withdraw endpoint must return the updated balance in the JSON response body, so verify the contract before the adapter implementation.
-- [ ] red-adapter http
+- [x] adapters-discovery (http)
+  - Check 1 (ports): http — the server has no withdraw route or withdraw-specific session/account adapter implementations, so the missing wiring requires `red-adapter http` and `green-adapter http` work.
+  - Check 2 (exceptions): http — [S] `ExceptionHandler` already maps `InvalidCredentialsException` to HTTP 401 and `ValidationException` to HTTP 400, so no new exception-mapping adapter work is required.
+  - Check 3 (response shape): http — the HTTP boundary must return the updated balance in the JSON response, but the server never registers a withdraw endpoint, so the missing response body and route require adapter steps.
+- [~] red-adapter http
 - [ ] green-adapter http
 - [ ] green-acceptance
