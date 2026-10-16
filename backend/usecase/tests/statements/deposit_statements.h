@@ -33,7 +33,7 @@ public:
     }
 };
 
-class DepositAccountPortForDepositStatements final : public usecase::IAccountingPort {
+class DepositAccountPortForDepositStatements final : public usecase::IDepositAccountingPort {
 public:
     std::optional<double> find_balance_for_username(const std::string& username) const override {
         if (username == kDepositUsername) {

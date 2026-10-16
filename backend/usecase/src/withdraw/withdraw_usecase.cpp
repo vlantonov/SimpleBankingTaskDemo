@@ -4,7 +4,7 @@
 namespace usecase {
 
 WithdrawUsecase::WithdrawUsecase(std::unique_ptr<IWithdrawSessionPort> session_port,
-                                 std::unique_ptr<IAccountingPort> account_port)
+                                 std::unique_ptr<IWithdrawAccountingPort> account_port)
     : session_port_(std::move(session_port))
     , account_port_(std::move(account_port)) {}
 

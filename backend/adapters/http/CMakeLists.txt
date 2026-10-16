@@ -3,6 +3,7 @@ add_library(adapter_http
     src/auth/logout_controller.cpp
     src/balance/balance_controller.cpp
     src/deposit/deposit_controller.cpp
+    src/withdraw/withdraw_controller.cpp
     src/exception_handler.cpp
 )
 target_include_directories(adapter_http PUBLIC include)

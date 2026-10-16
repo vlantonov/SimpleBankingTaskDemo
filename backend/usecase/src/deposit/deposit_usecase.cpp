@@ -4,7 +4,7 @@
 namespace usecase {
 
 DepositUsecase::DepositUsecase(std::unique_ptr<IDepositSessionPort> session_port,
-                               std::unique_ptr<IAccountingPort> account_port)
+                               std::unique_ptr<IDepositAccountingPort> account_port)
     : session_port_(std::move(session_port))
     , account_port_(std::move(account_port)) {}
 

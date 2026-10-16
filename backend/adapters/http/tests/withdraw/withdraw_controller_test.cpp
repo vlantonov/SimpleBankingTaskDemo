@@ -27,7 +27,7 @@ private:
     std::unordered_map<std::string, std::string> sessions_;
 };
 
-class FakeWithdrawAccountPort : public usecase::IAccountingPort {
+class FakeWithdrawAccountPort : public usecase::IWithdrawAccountingPort {
 public:
     std::optional<double> find_balance_for_username(const std::string& username) const override {
         if (username == "ola") {

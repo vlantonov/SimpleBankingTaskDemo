@@ -33,7 +33,7 @@ public:
     }
 };
 
-class WithdrawAccountPortForWithdrawStatements final : public usecase::IAccountingPort {
+class WithdrawAccountPortForWithdrawStatements final : public usecase::IWithdrawAccountingPort {
 public:
     std::optional<double> find_balance_for_username(const std::string& username) const override {
         if (username == kWithdrawUsername) {

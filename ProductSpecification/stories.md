@@ -2,10 +2,6 @@
 
 <!-- Track story progress across phases. Update as work proceeds. -->
 
-| #  | Story                         | Spec | Back | Intg | Sec | Load | Infra | Tests | %  |
-|----|-------------------------------|------|------|------|-----|------|-------|-------|----|
-| 04 | Withdraw Funds                | ✅   | 🔧    | —    | —   | —    | —     | 0/0   | 0% |
-
 # Backlog
 
 <!-- Add stories here as numbered rows. Move to In Progress when work begins. -->
@@ -22,3 +18,4 @@
 | 01 | User Authentication           | ✅   | ✅    | —    | ✅    | —    | ✅     | 20/20 | 100% |
 | 02 | Get Balance                   | ✅   | ✅    | —    | —    | —    | —     | 2/2   | 100% |
 | 03 | Deposit Funds                 | ✅   | ✅    | —    | —    | —    | —     | 3/3   | 100% |
+| 04 | Withdraw Funds                | ✅   | ✅    | —    | —    | —    | —     | 7/7   | 100% |
