@@ -203,9 +203,9 @@
 - [S] green-acceptance (live behavior already proves recovery: outage returns HTTP 500, restored file allows a fresh login with HTTP 200)
 
 ### I2.1 Login fails gracefully when user data cannot be read
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (the runtime stores user records in-memory, so there is no file-backed user-data read path to fail; the current design has no persistence boundary to simulate)
+- [S] design (existing implementation already satisfies the requirement by design: user data is held in an in-memory `AuthState`, not a user-data file that can be read-failed)
+- [S] red-usecase (there is no user-data file read in the login usecase path; all user lookups are performed against the in-memory store)
+- [S] green-usecase (no usecase-layer change is required because the scenario is not applicable to the current in-memory architecture)
+- [S] adapters-discovery (no user-data storage adapter exists in the runtime; the only storage boundary is the in-memory `InMemoryUserPort` composed in the server)
+- [S] green-acceptance (architecture review confirms the scenario is not applicable to the current app model; no external file-read failure exists to test)
