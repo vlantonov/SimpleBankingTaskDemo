@@ -4,6 +4,7 @@ add_library(usecase
     src/balance/get_balance_usecase.cpp
     src/deposit/deposit_usecase.cpp
     src/history/get_history_usecase.cpp
+    src/transfer/transfer_usecase.cpp
     src/withdraw/withdraw_usecase.cpp
 )
 target_include_directories(usecase PUBLIC include)
@@ -15,6 +16,7 @@ add_executable(usecase_tests
     tests/balance/get_balance_test.cpp
     tests/deposit/deposit_test.cpp
     tests/history/get_history_test.cpp
+    tests/transfer/transfer_test.cpp
     tests/withdraw/withdraw_test.cpp
 )
 target_include_directories(usecase_tests PRIVATE tests)

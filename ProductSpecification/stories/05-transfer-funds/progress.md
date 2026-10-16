@@ -11,7 +11,7 @@
 ### Scenario 1: Authenticated user can transfer funds to another existing user
 - [x] red-acceptance
 - [x] design
-- [~] red-usecase
-- [ ] green-usecase
+- [x] red-usecase
+- [~] green-usecase
 - [ ] adapters-discovery
 - [ ] green-acceptance
