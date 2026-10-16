@@ -1,7 +1,7 @@
 # Story 2: Get Balance — Progress
 
 ## Spec
-- [~] interview
-- [ ] story
+- [x] interview
+- [~] story
 - [ ] api-spec
 - [ ] test-spec
