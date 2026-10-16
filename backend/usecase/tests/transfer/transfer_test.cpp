@@ -12,6 +12,11 @@ TEST_F(TransferTest, transfer_request_without_an_active_session_is_rejected) {
     transfer_statements_.assert_transfer_request_without_an_active_session_is_rejected();
 }
 
+TEST_F(TransferTest, DISABLED_transfer_request_with_unknown_destination_account_is_rejected_bad_optional_access) {
+    SCOPED_TRACE("Scenario 1.2: Transfer request with unknown destination account is rejected");
+    transfer_statements_.assert_transfer_request_with_unknown_destination_account_is_rejected();
+}
+
 TEST_F(TransferTest, authenticated_user_can_transfer_funds_to_another_existing_user_not_implemented) {
     SCOPED_TRACE("Scenario 3.1: Authenticated user can transfer funds to another existing user");
     transfer_statements_.when_authenticated_user_transfers_funds_to_another_existing_user();

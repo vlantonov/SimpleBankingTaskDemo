@@ -13,6 +13,7 @@ namespace transfer_statements_detail {
 constexpr auto kValidTransferToken = "ola.header.signature";
 constexpr auto kSourceUsername = "ola";
 constexpr auto kDestinationUsername = "marta";
+constexpr auto kUnknownDestinationUsername = "ghost";
 constexpr auto kSourceStartingBalance = 200.0;
 constexpr auto kDestinationStartingBalance = 50.0;
 constexpr auto kTransferAmount = 40.0;
@@ -76,7 +77,10 @@ public:
             build_account_port());
 
         EXPECT_THAT([&]() {
-            usecase.execute(domain::TransferRequest{"missing-token", transfer_statements_detail::kDestinationUsername, 25.0});
+            usecase.execute(build_transfer_request_for(
+                "missing-token",
+                transfer_statements_detail::kDestinationUsername,
+                25.0));
         }, testing::ThrowsMessage<domain::InvalidCredentialsException>(testing::Eq("Authentication error")));
     }
 
@@ -84,21 +88,35 @@ public:
         actual_response_ = build_usecase().execute(build_transfer_request());
     }
 
+    void assert_transfer_request_with_unknown_destination_account_is_rejected() {
+        EXPECT_THAT([&]() {
+            build_usecase().execute(build_transfer_request_for(
+                transfer_statements_detail::kValidTransferToken,
+                transfer_statements_detail::kUnknownDestinationUsername,
+                25.0));
+        }, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Destination account not found")));
+    }
+
     void assert_transfer_updates_both_account_balances() const {
         ASSERT_EQ(actual_response_, std::optional<usecase::TransferResponse>{expected_transfer_response()});
     }
 
 private:
+    static domain::TransferRequest build_transfer_request_for(const std::string& token,
+                                                             const std::string& destination_username,
+                                                             double amount) {
+        return domain::TransferRequest{token, destination_username, amount};
+    }
+
     static std::unique_ptr<usecase::ITransferAccountPort> build_account_port() {
         return std::make_unique<transfer_statements_detail::TransferAccountPortForTransferStatements>();
     }
 
     static domain::TransferRequest build_transfer_request() {
-        return domain::TransferRequest{
+        return build_transfer_request_for(
             transfer_statements_detail::kValidTransferToken,
             transfer_statements_detail::kDestinationUsername,
-            transfer_statements_detail::kTransferAmount
-        };
+            transfer_statements_detail::kTransferAmount);
     }
 
     static usecase::TransferUsecase build_usecase() {
