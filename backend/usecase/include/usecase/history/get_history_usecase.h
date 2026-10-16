@@ -14,9 +14,9 @@ public:
 };
 
 struct HistoryEntry {
-    std::string kind{};
+    std::string type{};
     double amount{};
-    std::string description{};
+    std::string timestamp{};
 };
 
 class IHistoryAccountPort {

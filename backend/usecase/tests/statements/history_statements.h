@@ -35,8 +35,8 @@ public:
     std::vector<usecase::HistoryEntry> find_history_for_username(const std::string& username) const override {
         if (username == kHistoryUsername) {
             return {
-                usecase::HistoryEntry{"withdraw", 25.0, "ATM withdrawal"},
-                usecase::HistoryEntry{"deposit", 100.0, "salary deposit"}
+                usecase::HistoryEntry{"withdraw", 25.0, "2024-01-01T00:00:10Z"},
+                usecase::HistoryEntry{"deposit", 100.0, "2024-01-01T00:00:00Z"}
             };
         }
         return {};
@@ -72,9 +72,9 @@ public:
 
         const auto response = usecase.execute(domain::HistoryRequest{history_statements_detail::kValidHistoryToken});
         ASSERT_EQ(response.entries.size(), 2);
-        EXPECT_EQ(response.entries[0].kind, "withdraw");
+        EXPECT_EQ(response.entries[0].type, "withdraw");
         EXPECT_DOUBLE_EQ(response.entries[0].amount, 25.0);
-        EXPECT_EQ(response.entries[1].kind, "deposit");
+        EXPECT_EQ(response.entries[1].type, "deposit");
         EXPECT_DOUBLE_EQ(response.entries[1].amount, 100.0);
     }
 };

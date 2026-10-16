@@ -4,12 +4,14 @@
 #include "adapters/http/balance/balance_controller.h"
 #include "adapters/http/deposit/deposit_controller.h"
 #include "adapters/http/exception_handler.h"
+#include "adapters/http/history/history_controller.h"
 #include "adapters/http/withdraw/withdraw_controller.h"
 #include "domain/domain_exception.h"
 #include "usecase/auth/login_usecase.h"
 #include "usecase/auth/logout_usecase.h"
 #include "usecase/balance/get_balance_usecase.h"
 #include "usecase/deposit/deposit_usecase.h"
+#include "usecase/history/get_history_usecase.h"
 #include "usecase/withdraw/withdraw_usecase.h"
 #include <fstream>
 #include <iomanip>
@@ -25,6 +27,7 @@ namespace {
 struct AuthState {
     std::unordered_map<std::string, usecase::AuthUser> users;
     std::unordered_map<std::string, double> balances;
+    std::unordered_map<std::string, std::vector<usecase::HistoryEntry>> transactions;
 };
 class InMemoryUserPort final : public usecase::IUserPort {
 public:
@@ -40,6 +43,10 @@ public:
         const auto user = usecase::AuthUser{username, pin};
         state_->users[username] = user;
         state_->balances[username] = 250.0;
+        state_->transactions[username] = {
+            usecase::HistoryEntry{"deposit", 100.0, "2024-01-01T00:00:00Z"},
+            usecase::HistoryEntry{"withdraw", 25.0, "2024-01-01T00:00:10Z"}
+        };
         return user;
     }
 private:
@@ -94,6 +101,20 @@ public:
             return;
         }
         it->second -= amount;
+        state_->transactions[username].push_back(usecase::HistoryEntry{"withdraw", amount, "2024-01-01T00:00:00Z"});
+    }
+private:
+    std::shared_ptr<AuthState> state_;
+};
+class InMemoryHistoryAccountPort final : public usecase::IHistoryAccountPort {
+public:
+    explicit InMemoryHistoryAccountPort(std::shared_ptr<AuthState> state): state_(std::move(state)) {}
+    std::vector<usecase::HistoryEntry> find_history_for_username(const std::string& username) const override {
+        const auto it = state_->transactions.find(username);
+        if (it == state_->transactions.end()) {
+            return {};
+        }
+        return it->second;
     }
 private:
     std::shared_ptr<AuthState> state_;
@@ -171,6 +192,13 @@ public:
 private:
     std::shared_ptr<TokenSessionPort> delegate_;
 };
+class SharedHistorySessionPort final : public usecase::IGetHistorySessionPort {
+public:
+    explicit SharedHistorySessionPort(std::shared_ptr<TokenSessionPort> delegate): delegate_(std::move(delegate)) {}
+    std::optional<std::string> find_username_by_token(const std::string& token) const override { return delegate_->find_username_by_token(token); }
+private:
+    std::shared_ptr<TokenSessionPort> delegate_;
+};
 class FileAuthEventLogPort final : public usecase::IAuthEventLogPort {
 public:
     void append(const usecase::AuthEvent& event) override {
@@ -198,15 +226,17 @@ struct LoginRuntime {
         get_balance_usecase(std::make_unique<SharedBalanceSessionPort>(token_session_port), std::make_unique<InMemoryBalanceAccountPort>(state)),
         deposit_usecase(std::make_unique<SharedDepositSessionPort>(token_session_port), std::make_unique<InMemoryDepositAccountPort>(state)),
         withdraw_usecase(std::make_unique<SharedWithdrawSessionPort>(token_session_port), std::make_unique<InMemoryWithdrawAccountPort>(state)),
+        get_history_usecase(std::make_unique<SharedHistorySessionPort>(token_session_port), std::make_unique<InMemoryHistoryAccountPort>(state)),
         login_controller(login_usecase, exception_handler),
         logout_controller(logout_usecase, exception_handler),
         balance_controller(get_balance_usecase, exception_handler),
         deposit_controller(deposit_usecase, exception_handler),
-        withdraw_controller(withdraw_usecase, exception_handler) {}
+        withdraw_controller(withdraw_usecase, exception_handler),
+        history_controller(get_history_usecase, exception_handler) {}
     void capture_login_attempt(const httplib::Request& req) {
         try { const auto json = nlohmann::json::parse(req.body); token_session_port->set_login_attempt(json.value("user", ""), json.value("pin", "")); } catch (const std::exception&) {}
     }
-    std::shared_ptr<AuthState> state; std::shared_ptr<TokenSessionPort> token_session_port; usecase::LoginUsecase login_usecase; usecase::LogoutUsecase logout_usecase; usecase::GetBalanceUsecase get_balance_usecase; usecase::DepositUsecase deposit_usecase; usecase::WithdrawUsecase withdraw_usecase; adapters::http::ExceptionHandler exception_handler; adapters::http::LoginController login_controller; adapters::http::LogoutController logout_controller; adapters::http::BalanceController balance_controller; adapters::http::DepositController deposit_controller; adapters::http::WithdrawController withdraw_controller;
+    std::shared_ptr<AuthState> state; std::shared_ptr<TokenSessionPort> token_session_port; usecase::LoginUsecase login_usecase; usecase::LogoutUsecase logout_usecase; usecase::GetBalanceUsecase get_balance_usecase; usecase::DepositUsecase deposit_usecase; usecase::WithdrawUsecase withdraw_usecase; usecase::GetHistoryUsecase get_history_usecase; adapters::http::ExceptionHandler exception_handler; adapters::http::LoginController login_controller; adapters::http::LogoutController logout_controller; adapters::http::BalanceController balance_controller; adapters::http::DepositController deposit_controller; adapters::http::WithdrawController withdraw_controller; adapters::http::HistoryController history_controller;
 };
 }
 static void handle_error(const httplib::Request&, httplib::Response& res) { if (res.body.empty()) { res.set_content(R"({"error": "Not Found"})", "application/json"); } }
@@ -217,5 +247,6 @@ void configure_server(httplib::Server& server) {
     server.Get("/api/v1/balance", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->balance_controller.handle_balance(req, res); });
     server.Post("/api/v1/deposit", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->deposit_controller.handle_deposit(req, res); });
     server.Post("/api/v1/withdraw", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->withdraw_controller.handle_withdraw(req, res); });
+    server.Get("/api/v1/history", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->history_controller.handle_history(req, res); });
     server.set_error_handler(handle_error);
 }

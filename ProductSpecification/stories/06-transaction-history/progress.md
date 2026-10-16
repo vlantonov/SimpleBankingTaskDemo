@@ -13,5 +13,5 @@
 - [x] design
 - [x] red-usecase
 - [x] green-usecase
-- [~] adapters-discovery
-- [ ] green-acceptance
+- [x] adapters-discovery
+- [x] green-acceptance
