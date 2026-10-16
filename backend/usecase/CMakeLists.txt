@@ -12,6 +12,7 @@ add_executable(usecase_tests
     tests/auth/logout/logout_test.cpp
     tests/balance/get_balance_test.cpp
     tests/deposit/deposit_test.cpp
+    tests/withdraw/withdraw_test.cpp
 )
 target_include_directories(usecase_tests PRIVATE tests)
 target_link_libraries(usecase_tests PRIVATE usecase GTest::gtest_main GTest::gmock)
