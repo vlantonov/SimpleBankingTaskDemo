@@ -8,8 +8,8 @@
 
 ## Backend
 - [x] red-acceptance: deposit funds for an authenticated user increases the balance
-- [~] design
-- [ ] red-usecase
+- [x] design
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery (http)
   - Check 1 (ports): http — `DepositUsecase` will depend on a session validation port and an account/ledger port, so confirm the route and adapter wiring before implementing the HTTP handler.
