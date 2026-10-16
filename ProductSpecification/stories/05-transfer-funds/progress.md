@@ -9,8 +9,8 @@
 ## Backend Scenarios (01_API_Tests.md)
 
 ### Scenario 1: Authenticated user can transfer funds to another existing user
-- [~] red-acceptance
-- [ ] design
+- [x] red-acceptance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
