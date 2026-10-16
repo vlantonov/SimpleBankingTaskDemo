@@ -1,7 +1,7 @@
 # Story 6: Transaction History — Progress
 
 ## Spec
-- [~] interview
-- [ ] story
+- [x] interview
+- [~] story
 - [ ] api-spec
 - [ ] test-spec
