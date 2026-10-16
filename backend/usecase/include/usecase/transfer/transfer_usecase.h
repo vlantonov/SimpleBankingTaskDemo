@@ -38,7 +38,11 @@ public:
 
 private:
     std::string require_source_username(const domain::TransferRequest& request) const;
+    std::string require_destination_username(const domain::TransferRequest& request) const;
     double find_starting_balance(const std::string& username) const;
+    void append_transfer(const std::string& source_username,
+                         const std::string& destination_username,
+                         double amount) const;
     TransferResponse build_transfer_response(double source_starting_balance,
                                             double destination_starting_balance,
                                             double amount) const;
