@@ -2,6 +2,6 @@
 
 ## Spec
 - [x] interview
-- [~] story
-- [ ] api-spec
+- [x] story
+- [~] api-spec
 - [ ] test-spec
