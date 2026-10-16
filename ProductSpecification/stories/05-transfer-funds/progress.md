@@ -17,5 +17,10 @@
 - [x] green-usecase (coverage: transfer rejects missing active session)
 - [x] red-usecase (coverage: transfer rejects unknown destination account)
 - [x] green-usecase (coverage: transfer rejects unknown destination account)
-- [~] adapters-discovery
+- [x] adapters-discovery (http)
+	- Check 1 (ports): http — `TransferUsecase` depends on `ITransferSessionPort` and `ITransferAccountPort`, but the server wiring has no transfer-specific session/account adapters yet, so `red-adapter http` and `green-adapter http` are required.
+	- Check 2 (exceptions): http — [S] `ExceptionHandler` already maps `InvalidCredentialsException` to 401 and `ValidationException` to 400, which covers the current transfer usecase rejection paths.
+	- Check 3 (response shape): http — transfer acceptance expects a transfer endpoint returning updated source/destination balances, but no `/api/v1/transfer` route/controller response exists yet, so adapter steps are required.
+- [~] red-adapter http
+- [ ] green-adapter http
 - [ ] green-acceptance
