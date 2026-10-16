@@ -9,8 +9,8 @@
 ## Backend Scenarios (01_API_Tests.md)
 
 ### Scenario 1: Retrieve authenticated transaction history
-- [~] red-acceptance
-- [ ] design
+- [x] red-acceptance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery

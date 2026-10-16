@@ -7,6 +7,7 @@
 #include "dto/balance/balance_response.h"
 #include "dto/deposit/deposit_request.h"
 #include "dto/deposit/deposit_response.h"
+#include "dto/history/history_response.h"
 #include "dto/withdraw/withdraw_request.h"
 #include "dto/withdraw/withdraw_response.h"
 
@@ -75,6 +76,19 @@ public:
         auto res = client_.Post("/api/v1/withdraw", request.to_json_string(), "application/json");
         if (!res) return dto::withdraw::WithdrawResponse::connection_failed();
         return dto::withdraw::WithdrawResponse::parse(res->status, res->body);
+    }
+
+    dto::history::HistoryResponse history(const std::string& token) {
+        httplib::Headers headers{{"Authorization", "Bearer " + token}};
+        auto res = client_.Get("/api/v1/history", headers);
+        if (!res) return dto::history::HistoryResponse::connection_failed();
+        return dto::history::HistoryResponse::parse(res->status, res->body);
+    }
+
+    dto::history::HistoryResponse history_without_token() {
+        auto res = client_.Get("/api/v1/history");
+        if (!res) return dto::history::HistoryResponse::connection_failed();
+        return dto::history::HistoryResponse::parse(res->status, res->body);
     }
 
 private:

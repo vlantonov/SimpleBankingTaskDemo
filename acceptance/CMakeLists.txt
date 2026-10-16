@@ -2,6 +2,7 @@ add_executable(acceptance_tests
     tests/backend/auth/auth_acceptance_test.cpp
     tests/backend/balance/balance_acceptance_test.cpp
     tests/backend/deposit/deposit_acceptance_test.cpp
+    tests/backend/history/history_acceptance_test.cpp
     tests/backend/withdraw/withdraw_acceptance_test.cpp
 )
 

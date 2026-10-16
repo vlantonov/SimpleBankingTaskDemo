@@ -4,7 +4,7 @@
 
 | #  | Story                         | Spec | Back | Intg | Sec | Load | Infra | Tests | %  |
 |----|-------------------------------|------|------|------|-----|------|-------|-------|----|
-| 06 | Transaction History           | ✅    | 🔧    | —    | —   | n/a  | 🔧     | 0/1   | 0% |
+| 06 | Transaction History           | ✅    | 🔧    | —    | —   | n/a  | —     | 0/1   | 0% |
 
 # Backlog
 
