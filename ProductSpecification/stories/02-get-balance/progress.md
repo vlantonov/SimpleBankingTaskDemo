@@ -4,4 +4,12 @@
 - [x] interview
 - [x] story
 - [x] api-spec
-- [~] test-spec
+- [x] test-spec
+
+## Backend
+- [~] red-acceptance: get balance for an authenticated user returns the current balance
+- [ ] design
+- [ ] red-usecase
+- [ ] green-usecase
+- [ ] adapters-discovery
+- [ ] green-acceptance
