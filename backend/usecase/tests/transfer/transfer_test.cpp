@@ -7,7 +7,7 @@ protected:
     TransferStatements transfer_statements_;
 };
 
-TEST_F(TransferTest, DISABLED_transfer_request_without_an_active_session_is_rejected) {
+TEST_F(TransferTest, transfer_request_without_an_active_session_is_rejected) {
     SCOPED_TRACE("Scenario 1.1: Transfer request without an active session is rejected");
     transfer_statements_.assert_transfer_request_without_an_active_session_is_rejected();
 }

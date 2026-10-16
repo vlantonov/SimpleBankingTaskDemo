@@ -37,6 +37,12 @@ public:
     TransferResponse execute(const domain::TransferRequest& request) const;
 
 private:
+    std::string require_source_username(const domain::TransferRequest& request) const;
+    double find_starting_balance(const std::string& username) const;
+    TransferResponse build_transfer_response(double source_starting_balance,
+                                            double destination_starting_balance,
+                                            double amount) const;
+
     std::unique_ptr<ITransferSessionPort> session_port_;
     std::unique_ptr<ITransferAccountPort> account_port_;
 };
