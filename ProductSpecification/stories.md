@@ -2,6 +2,10 @@
 
 <!-- Track story progress across phases. Update as work proceeds. -->
 
+| #  | Story                         | Spec | Back | Intg | Sec | Load | Infra | Tests | %  |
+|----|-------------------------------|------|------|------|-----|------|-------|-------|----|
+| 06 | Transaction History           | 🔧    | —    | —    | —   | —    | —     | 0/0   | 0% |
+
 # Backlog
 
 <!-- Add stories here as numbered rows. Move to In Progress when work begins. -->
@@ -9,7 +13,6 @@
 | #  | Story                         | Spec | Back | Intg | Sec | Load | Infra | Tests | %  |
 |----|-------------------------------|------|------|------|-----|------|-------|-------|-----|
 | 05 | Transfer Funds                | ·    | ·    | ·    | ·   | ·    | ·     | ·     | 0% |
-| 06 | Transaction History           | ·    | ·    | ·    | ·   | ·    | ·     | ·     | 0% |
 
 # Done
 
