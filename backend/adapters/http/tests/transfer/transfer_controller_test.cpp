@@ -70,11 +70,11 @@ protected:
     std::unique_ptr<adapters::http::TransferController> controller_;
 };
 
-TEST_F(TransferControllerTest, DISABLED_transfer_without_session_token_is_rejected_with_authentication_error) {
+TEST_F(TransferControllerTest, transfer_without_session_token_is_rejected_with_authentication_error) {
     SCOPED_TRACE("Scenario 1.1: HTTP adapter — transfer without token returns 401 Authentication error");
 
     httplib::Request req;
-    req.body = R"({"destinationUsername":"marta","amount":40.0})";
+    req.body = R"({"destinationUser":"marta","amount":40.0})";
     httplib::Response res;
 
     controller_->handle_transfer(req, res);
@@ -85,14 +85,14 @@ TEST_F(TransferControllerTest, DISABLED_transfer_without_session_token_is_reject
     EXPECT_EQ(body.value("message", "missing"), "");
 }
 
-TEST_F(TransferControllerTest, DISABLED_authenticated_user_receives_updated_source_and_destination_balances) {
+TEST_F(TransferControllerTest, authenticated_user_receives_updated_source_and_destination_balances) {
     SCOPED_TRACE("Scenario 3.1: HTTP adapter — valid transfer request returns updated source and destination balances");
 
     fake_session_port_->given_active_session("ola.header.signature", "ola");
 
     httplib::Request req;
     req.set_header("Authorization", "Bearer ola.header.signature");
-    req.body = R"({"destinationUsername":"marta","amount":40.0})";
+    req.body = R"({"destinationUser":"marta","amount":40.0})";
     httplib::Response res;
 
     controller_->handle_transfer(req, res);

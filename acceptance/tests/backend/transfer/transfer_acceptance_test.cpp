@@ -27,7 +27,7 @@ protected:
     std::unique_ptr<TransferStatements> statements_;
 };
 
-TEST_F(TransferTest, DISABLED_authenticated_user_can_transfer_funds_to_another_existing_user) {
+TEST_F(TransferTest, authenticated_user_can_transfer_funds_to_another_existing_user) {
     SCOPED_TRACE("Scenario 3.1: Authenticated user can transfer funds to another existing user");
 
     const auto users = unique_transfer_users();

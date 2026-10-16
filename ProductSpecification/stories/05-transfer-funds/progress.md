@@ -22,5 +22,5 @@
 	- Check 2 (exceptions): http — [S] `ExceptionHandler` already maps `InvalidCredentialsException` to 401 and `ValidationException` to 400, which covers the current transfer usecase rejection paths.
 	- Check 3 (response shape): http — transfer acceptance expects a transfer endpoint returning updated source/destination balances, but no `/api/v1/transfer` route/controller response exists yet, so adapter steps are required.
 - [x] red-adapter http
-- [~] green-adapter http
-- [ ] green-acceptance
+- [x] green-adapter http
+- [x] green-acceptance

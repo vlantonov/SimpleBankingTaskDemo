@@ -4,7 +4,6 @@
 
 | #  | Story                         | Spec | Back | Intg | Sec | Load | Infra | Tests | %  |
 |----|-------------------------------|------|------|------|-----|------|-------|-------|----|
-| 05 | Transfer Funds                | ✅    | 🔧    | —    | —   | n/a  | —     | 0/1   | 0% |
 
 # Backlog
 
@@ -21,4 +20,5 @@
 | 02 | Get Balance                   | ✅   | ✅    | —    | —    | —    | —     | 2/2   | 100% |
 | 03 | Deposit Funds                 | ✅   | ✅    | —    | —    | —    | —     | 3/3   | 100% |
 | 04 | Withdraw Funds                | ✅   | ✅    | —    | —    | —    | —     | 7/7   | 100% |
+| 05 | Transfer Funds                | ✅    | ✅    | —    | —   | n/a  | —     | 1/1   | 100% |
 | 06 | Transaction History           | ✅    | ✅    | —    | —   | n/a  | —     | 1/1   | 100% |
