@@ -3,6 +3,7 @@ add_library(usecase
     src/auth/logout_usecase.cpp
     src/balance/get_balance_usecase.cpp
     src/deposit/deposit_usecase.cpp
+    src/withdraw/withdraw_usecase.cpp
 )
 target_include_directories(usecase PUBLIC include)
 target_link_libraries(usecase PUBLIC domain)

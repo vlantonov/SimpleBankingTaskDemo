@@ -3,5 +3,6 @@ add_library(domain
     src/auth/logout_request.cpp
     src/balance/balance_request.cpp
     src/deposit/deposit_request.cpp
+    src/withdraw/withdraw_request.cpp
 )
 target_include_directories(domain PUBLIC include)
