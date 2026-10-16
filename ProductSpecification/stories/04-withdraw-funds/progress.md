@@ -7,8 +7,8 @@
 - [x] test-spec
 
 ## Backend
-- [~] red-acceptance: withdraw funds for an authenticated user decreases the balance
-- [ ] design
+- [x] red-acceptance: withdraw funds for an authenticated user decreases the balance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery (http)

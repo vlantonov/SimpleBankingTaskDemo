@@ -7,6 +7,8 @@
 #include "dto/balance/balance_response.h"
 #include "dto/deposit/deposit_request.h"
 #include "dto/deposit/deposit_response.h"
+#include "dto/withdraw/withdraw_request.h"
+#include "dto/withdraw/withdraw_response.h"
 
 class ApplicationClient {
 public:
@@ -58,6 +60,21 @@ public:
         auto res = client_.Post("/api/v1/deposit", request.to_json_string(), "application/json");
         if (!res) return dto::deposit::DepositResponse::connection_failed();
         return dto::deposit::DepositResponse::parse(res->status, res->body);
+    }
+
+    dto::withdraw::WithdrawResponse withdraw(const std::string& token, double amount) {
+        httplib::Headers headers{{"Authorization", "Bearer " + token}};
+        const auto request = dto::withdraw::WithdrawRequest{amount};
+        auto res = client_.Post("/api/v1/withdraw", headers, request.to_json_string(), "application/json");
+        if (!res) return dto::withdraw::WithdrawResponse::connection_failed();
+        return dto::withdraw::WithdrawResponse::parse(res->status, res->body);
+    }
+
+    dto::withdraw::WithdrawResponse withdraw_without_token(double amount) {
+        const auto request = dto::withdraw::WithdrawRequest{amount};
+        auto res = client_.Post("/api/v1/withdraw", request.to_json_string(), "application/json");
+        if (!res) return dto::withdraw::WithdrawResponse::connection_failed();
+        return dto::withdraw::WithdrawResponse::parse(res->status, res->body);
     }
 
 private:
