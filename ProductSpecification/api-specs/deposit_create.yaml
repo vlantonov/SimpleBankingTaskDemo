@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: Deposit Funds
+  version: 1.0.0
+
+paths:
+  /api/v1/deposit:
+    post:
+      summary: Deposit funds into the authenticated user's account
+      operationId: createDeposit
+      tags:
+        - deposit
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequest'
+      responses:
+        '201':
+          description: Deposit created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositResponse'
+        '400':
+          description: Invalid deposit amount
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No valid active session for the caller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    DepositRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Positive amount to add to the authenticated user's account
+          example: 75.5
+
+    DepositResponse:
+      type: object
+      required:
+        - balance
+      properties:
+        balance:
+          type: number
+          format: double
+          description: Updated current account balance after the deposit
+          example: 325.5
+        message:
+          type: string
+          description: Human-readable confirmation message
+          example: Deposit successful
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Authentication error
