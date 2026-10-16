@@ -4,10 +4,10 @@
 - [x] interview
 - [x] story
 - [x] api-spec
-- [~] test-spec
+- [x] test-spec
 
 ## Backend
-- [ ] red-acceptance: withdraw funds for an authenticated user decreases the balance
+- [~] red-acceptance: withdraw funds for an authenticated user decreases the balance
 - [ ] design
 - [ ] red-usecase
 - [ ] green-usecase
