@@ -1,8 +1,9 @@
-[22:49:34] red-agent START S3.1 long username rejection
-[22:49:34] red-agent PREDICT HTTP 200 instead of HTTP 400 Validation error
-[22:49:34] red-agent RUN 1 failed: status 200
-[22:49:34] test-review-agent START strict assertion review
-[22:49:34] test-review-agent DONE no issues found
-[22:49:34] refactor-agent START no structural cleanup needed
-[22:49:34] refactor-agent DONE no refactor required
-[23:02:06] design-preview REVIEW: reuse LoginRequest validation boundary, reject username >256 chars, ValidationException->400
+
+[19:41:47] [red-agent] START: I1.1 unavailable log storage
+[19:41:47] [red-agent] PREDICT: HTTP 500 Server error when auth_events.log is a directory
+[19:41:47] [red-agent] RUN: acceptance test result 0 passed, 1 failed
+[19:41:47] [red-agent] DONE: red acceptance added for log storage failure
+[19:41:47] [test-review-agent] START: I1.1 strict assertion review
+[19:41:47] [test-review-agent] DONE: exact status/error assertions accepted
+[19:41:47] [refactor-agent] START: I1.1 refactor scan
+[19:41:47] [refactor-agent] DONE: no blocking refactor required

@@ -187,8 +187,8 @@
 ## Infrastructure Scenarios (04_Infrastructure_Tests.md)
 
 ### I1.1 Login fails gracefully when the log file cannot be written
-- [ ] red-acceptance
-- [ ] design
+- [x] red-acceptance (failing acceptance test proves the login still returns HTTP 200 and welcome message when auth_events.log is a directory; expected HTTP 500 server error)
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery

@@ -20,6 +20,16 @@ public:
         then_login_is_rejected_with_error(400, "Validation error");
     }
 
+    void then_login_is_rejected_with_server_error() {
+        then_login_is_rejected_with_error(500, "Server error");
+    }
+
+    void when_log_storage_is_unavailable() {
+        const auto log_path = std::filesystem::path{"auth_events.log"};
+        std::filesystem::remove_all(log_path);
+        std::filesystem::create_directory(log_path);
+    }
+
     void then_login_succeeds_with_welcome_message(const std::string& user) {
         EXPECT_THAT(
             last_response_,
