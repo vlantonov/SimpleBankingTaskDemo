@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Get Balance
+  version: 1.0.0
+
+paths:
+  /api/v1/balance:
+    get:
+      summary: Read the authenticated user's current balance
+      operationId: getBalance
+      tags:
+        - balance
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Balance retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '401':
+          description: No valid active session for the caller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    BalanceResponse:
+      type: object
+      required:
+        - balance
+      properties:
+        balance:
+          type: number
+          format: float
+          description: Current account balance for the authenticated user
+          example: 1234.56
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Authentication error
