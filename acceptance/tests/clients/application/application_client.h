@@ -5,6 +5,8 @@
 #include "dto/auth/login_response.h"
 #include "dto/auth/logout_response.h"
 #include "dto/balance/balance_response.h"
+#include "dto/deposit/deposit_request.h"
+#include "dto/deposit/deposit_response.h"
 
 class ApplicationClient {
 public:
@@ -41,6 +43,21 @@ public:
         auto res = client_.Get("/api/v1/balance");
         if (!res) return dto::balance::BalanceResponse::connection_failed();
         return dto::balance::BalanceResponse::parse(res->status, res->body);
+    }
+
+    dto::deposit::DepositResponse deposit(const std::string& token, double amount) {
+        httplib::Headers headers{{"Authorization", "Bearer " + token}};
+        const auto request = dto::deposit::DepositRequest{amount};
+        auto res = client_.Post("/api/v1/deposit", headers, request.to_json_string(), "application/json");
+        if (!res) return dto::deposit::DepositResponse::connection_failed();
+        return dto::deposit::DepositResponse::parse(res->status, res->body);
+    }
+
+    dto::deposit::DepositResponse deposit_without_token(double amount) {
+        const auto request = dto::deposit::DepositRequest{amount};
+        auto res = client_.Post("/api/v1/deposit", request.to_json_string(), "application/json");
+        if (!res) return dto::deposit::DepositResponse::connection_failed();
+        return dto::deposit::DepositResponse::parse(res->status, res->body);
     }
 
 private:

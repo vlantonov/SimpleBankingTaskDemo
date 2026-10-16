@@ -7,8 +7,8 @@
 - [x] test-spec
 
 ## Backend
-- [~] red-acceptance: deposit funds for an authenticated user increases the balance
-- [ ] design
+- [x] red-acceptance: deposit funds for an authenticated user increases the balance
+- [~] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery (http)
