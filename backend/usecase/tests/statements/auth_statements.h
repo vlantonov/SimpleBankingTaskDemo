@@ -64,6 +64,14 @@ public:
         };
         EXPECT_THAT(invalid_login, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Validation error")));
     }
+    void assert_login_with_overly_long_pin_is_rejected() {
+        const auto long_pin = std::string(65, '7');
+        const auto invalid_login = [&]() {
+            const domain::LoginRequest request{"ola", long_pin};
+            login_usecase_.execute(request);
+        };
+        EXPECT_THAT(invalid_login, testing::ThrowsMessage<domain::ValidationException>(testing::Eq("Validation error")));
+    }
     void assert_first_login_creates_user_and_opens_session() {
         const auto response = login_usecase_.execute(login_scope_for_first_login().to_login_request());
         EXPECT_THAT(response.message, testing::Eq("Welcome, ola"));

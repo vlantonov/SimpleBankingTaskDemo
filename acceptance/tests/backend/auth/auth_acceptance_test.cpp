@@ -32,6 +32,15 @@ TEST_F(AuthTest, login_with_excessively_long_username_is_rejected) {
     statements_->then_login_is_rejected_with_validation_error();
 }
 
+TEST_F(AuthTest, login_with_excessively_long_pin_is_rejected) {
+    SCOPED_TRACE("Scenario S3.2: Excessively long PIN is rejected");
+
+    const auto username = std::string{"long_pin_user_"} + std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
+    const auto long_pin = std::string(65, '7');
+    statements_->when_user_logs_in(username, long_pin);
+    statements_->then_login_is_rejected_with_validation_error();
+}
+
 TEST_F(AuthTest, first_login_creates_the_user_and_opens_a_session_returns_400_bad_request) {
     SCOPED_TRACE("Scenario 2.1: First login creates the user and opens a session");
 

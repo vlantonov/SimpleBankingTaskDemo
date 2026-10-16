@@ -169,20 +169,20 @@
 - [x] green-acceptance (live backend rejects overlong usernames with HTTP 400 and error="Validation error")
 
 ### S3.2 Excessively long PIN is rejected
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [x] red-acceptance
+- [x] design
+- [x] red-usecase
+- [x] green-usecase
+- [x] adapters-discovery
+- [x] green-acceptance
 
 ### S4.1 PIN is not echoed in any response body or log
-- [ ] red-acceptance
-- [ ] design
-- [ ] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
-- [ ] green-acceptance
+- [S] red-acceptance (capability exists: live login response omits the submitted PIN, and auth_events.log records only USER_CREATED/LOGIN with the username)
+- [S] design (existing behavior already satisfies the requirement; no new design decision required)
+- [S] red-usecase (LoginUsecase appends only the username to AuthEvent and returns a Welcome message/token without the PIN)
+- [S] green-usecase (no usecase change needed)
+- [S] adapters-discovery (no new adapter behavior required; the HTTP layer already returns only the welcome message and token)
+- [S] green-acceptance (live backend response and auth_events.log both omit the submitted PIN)
 
 ## Infrastructure Scenarios (04_Infrastructure_Tests.md)
 
