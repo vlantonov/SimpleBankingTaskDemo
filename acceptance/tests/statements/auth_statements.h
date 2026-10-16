@@ -30,6 +30,12 @@ public:
         std::filesystem::create_directory(log_path);
     }
 
+    void when_user_data_storage_is_unavailable() {
+        const auto user_data_path = std::filesystem::path{"users.json"};
+        std::filesystem::remove_all(user_data_path);
+        std::filesystem::create_directory(user_data_path);
+    }
+
     void then_login_succeeds_with_welcome_message(const std::string& user) {
         EXPECT_THAT(
             last_response_,
