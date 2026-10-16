@@ -8,8 +8,8 @@
 
 ## Backend
 - [x] red-acceptance: withdraw funds for an authenticated user decreases the balance
-- [~] design
-- [ ] red-usecase
+- [x] design
+- [~] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery (http)
   - Check 1 (ports): http — `WithdrawUsecase` will need a session validation port and an account/ledger port, so confirm the route and adapter wiring before implementing the HTTP handler.
