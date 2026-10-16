@@ -11,7 +11,7 @@
 ### Scenario 1: Retrieve authenticated transaction history
 - [x] red-acceptance
 - [x] design
-- [~] red-usecase
-- [ ] green-usecase
-- [ ] adapters-discovery
+- [x] red-usecase
+- [x] green-usecase
+- [~] adapters-discovery
 - [ ] green-acceptance
