@@ -2,11 +2,13 @@
 #include "adapters/http/auth/login_controller.h"
 #include "adapters/http/auth/logout_controller.h"
 #include "adapters/http/balance/balance_controller.h"
+#include "adapters/http/deposit/deposit_controller.h"
 #include "adapters/http/exception_handler.h"
 #include "domain/domain_exception.h"
 #include "usecase/auth/login_usecase.h"
 #include "usecase/auth/logout_usecase.h"
 #include "usecase/balance/get_balance_usecase.h"
+#include "usecase/deposit/deposit_usecase.h"
 #include <fstream>
 #include <iomanip>
 #include <memory>
@@ -50,6 +52,26 @@ public:
             return std::nullopt;
         }
         return std::optional<double>{it->second};
+    }
+private:
+    std::shared_ptr<AuthState> state_;
+};
+class InMemoryDepositAccountPort final : public usecase::IAccountingPort {
+public:
+    explicit InMemoryDepositAccountPort(std::shared_ptr<AuthState> state): state_(std::move(state)) {}
+    std::optional<double> find_balance_for_username(const std::string& username) const override {
+        const auto it = state_->balances.find(username);
+        if (it == state_->balances.end()) {
+            return std::nullopt;
+        }
+        return std::optional<double>{it->second};
+    }
+    void append_deposit_for_username(const std::string& username, double amount) override {
+        const auto it = state_->balances.find(username);
+        if (it == state_->balances.end()) {
+            return;
+        }
+        it->second += amount;
     }
 private:
     std::shared_ptr<AuthState> state_;
@@ -113,6 +135,13 @@ public:
 private:
     std::shared_ptr<TokenSessionPort> delegate_;
 };
+class SharedDepositSessionPort final : public usecase::IDepositSessionPort {
+public:
+    explicit SharedDepositSessionPort(std::shared_ptr<TokenSessionPort> delegate): delegate_(std::move(delegate)) {}
+    std::optional<std::string> find_username_by_token(const std::string& token) const override { return delegate_->find_username_by_token(token); }
+private:
+    std::shared_ptr<TokenSessionPort> delegate_;
+};
 class FileAuthEventLogPort final : public usecase::IAuthEventLogPort {
 public:
     void append(const usecase::AuthEvent& event) override {
@@ -138,13 +167,15 @@ struct LoginRuntime {
         login_usecase(std::make_unique<InMemoryUserPort>(state), std::make_unique<SharedTokenSessionPort>(token_session_port), std::make_unique<FileAuthEventLogPort>()),
         logout_usecase(std::make_unique<SharedLogoutSessionPort>(token_session_port), std::make_unique<FileAuthEventLogPort>()),
         get_balance_usecase(std::make_unique<SharedBalanceSessionPort>(token_session_port), std::make_unique<InMemoryBalanceAccountPort>(state)),
+        deposit_usecase(std::make_unique<SharedDepositSessionPort>(token_session_port), std::make_unique<InMemoryDepositAccountPort>(state)),
         login_controller(login_usecase, exception_handler),
         logout_controller(logout_usecase, exception_handler),
-        balance_controller(get_balance_usecase, exception_handler) {}
+        balance_controller(get_balance_usecase, exception_handler),
+        deposit_controller(deposit_usecase, exception_handler) {}
     void capture_login_attempt(const httplib::Request& req) {
         try { const auto json = nlohmann::json::parse(req.body); token_session_port->set_login_attempt(json.value("user", ""), json.value("pin", "")); } catch (const std::exception&) {}
     }
-    std::shared_ptr<AuthState> state; std::shared_ptr<TokenSessionPort> token_session_port; usecase::LoginUsecase login_usecase; usecase::LogoutUsecase logout_usecase; usecase::GetBalanceUsecase get_balance_usecase; adapters::http::ExceptionHandler exception_handler; adapters::http::LoginController login_controller; adapters::http::LogoutController logout_controller; adapters::http::BalanceController balance_controller;
+    std::shared_ptr<AuthState> state; std::shared_ptr<TokenSessionPort> token_session_port; usecase::LoginUsecase login_usecase; usecase::LogoutUsecase logout_usecase; usecase::GetBalanceUsecase get_balance_usecase; usecase::DepositUsecase deposit_usecase; adapters::http::ExceptionHandler exception_handler; adapters::http::LoginController login_controller; adapters::http::LogoutController logout_controller; adapters::http::BalanceController balance_controller; adapters::http::DepositController deposit_controller;
 };
 }
 static void handle_error(const httplib::Request&, httplib::Response& res) { if (res.body.empty()) { res.set_content(R"({"error": "Not Found"})", "application/json"); } }
@@ -153,5 +184,6 @@ void configure_server(httplib::Server& server) {
     server.Post("/api/v1/login", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->capture_login_attempt(req); login_runtime->login_controller.handle_login(req, res); });
     server.Post("/api/v1/logout", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->logout_controller.handle_logout(req, res); });
     server.Get("/api/v1/balance", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->balance_controller.handle_balance(req, res); });
+    server.Post("/api/v1/deposit", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->deposit_controller.handle_deposit(req, res); });
     server.set_error_handler(handle_error);
 }
