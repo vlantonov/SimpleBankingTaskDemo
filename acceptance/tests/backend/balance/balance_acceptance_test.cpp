@@ -17,7 +17,7 @@ protected:
     std::unique_ptr<BalanceStatements> statements_;
 };
 
-TEST_F(BalanceTest, DISABLED_authenticated_user_receives_the_current_balance) {
+TEST_F(BalanceTest, authenticated_user_receives_the_current_balance) {
     SCOPED_TRACE("Scenario 2.1: Authenticated user receives the current balance");
 
     const auto user = std::string{"ola_balance_"} + std::to_string(
@@ -28,7 +28,7 @@ TEST_F(BalanceTest, DISABLED_authenticated_user_receives_the_current_balance) {
     statements_->then_authenticated_user_receives_current_balance(250.00);
 }
 
-TEST_F(BalanceTest, DISABLED_unauthenticated_balance_request_is_rejected) {
+TEST_F(BalanceTest, unauthenticated_balance_request_is_rejected) {
     SCOPED_TRACE("Scenario 1.1: Unauthenticated balance request is rejected");
 
     statements_->when_unauthenticated_user_requests_balance();

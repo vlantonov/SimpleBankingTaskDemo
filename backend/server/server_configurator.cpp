@@ -1,10 +1,12 @@
 #include "server_configurator.h"
 #include "adapters/http/auth/login_controller.h"
 #include "adapters/http/auth/logout_controller.h"
+#include "adapters/http/balance/balance_controller.h"
 #include "adapters/http/exception_handler.h"
 #include "domain/domain_exception.h"
 #include "usecase/auth/login_usecase.h"
 #include "usecase/auth/logout_usecase.h"
+#include "usecase/balance/get_balance_usecase.h"
 #include <fstream>
 #include <iomanip>
 #include <memory>
@@ -16,7 +18,10 @@
 #include <unordered_map>
 
 namespace {
-struct AuthState { std::unordered_map<std::string, usecase::AuthUser> users; };
+struct AuthState {
+    std::unordered_map<std::string, usecase::AuthUser> users;
+    std::unordered_map<std::string, double> balances;
+};
 class InMemoryUserPort final : public usecase::IUserPort {
 public:
     explicit InMemoryUserPort(std::shared_ptr<AuthState> state): state_(std::move(state)) {}
@@ -28,7 +33,23 @@ public:
         return std::optional<usecase::AuthUser>{it->second};
     }
     usecase::AuthUser create(const std::string& username, const std::string& pin) override {
-        const auto user = usecase::AuthUser{username, pin}; state_->users[username] = user; return user;
+        const auto user = usecase::AuthUser{username, pin};
+        state_->users[username] = user;
+        state_->balances[username] = 250.0;
+        return user;
+    }
+private:
+    std::shared_ptr<AuthState> state_;
+};
+class InMemoryBalanceAccountPort final : public usecase::IAccountPort {
+public:
+    explicit InMemoryBalanceAccountPort(std::shared_ptr<AuthState> state): state_(std::move(state)) {}
+    std::optional<double> find_balance_for_username(const std::string& username) const override {
+        const auto it = state_->balances.find(username);
+        if (it == state_->balances.end()) {
+            return std::nullopt;
+        }
+        return std::optional<double>{it->second};
     }
 private:
     std::shared_ptr<AuthState> state_;
@@ -85,6 +106,13 @@ public:
 private:
     std::shared_ptr<TokenSessionPort> delegate_;
 };
+class SharedBalanceSessionPort final : public usecase::IGetBalanceSessionPort {
+public:
+    explicit SharedBalanceSessionPort(std::shared_ptr<TokenSessionPort> delegate): delegate_(std::move(delegate)) {}
+    std::optional<std::string> find_username_by_token(const std::string& token) const override { return delegate_->find_username_by_token(token); }
+private:
+    std::shared_ptr<TokenSessionPort> delegate_;
+};
 class FileAuthEventLogPort final : public usecase::IAuthEventLogPort {
 public:
     void append(const usecase::AuthEvent& event) override {
@@ -104,11 +132,19 @@ private:
     }
 };
 struct LoginRuntime {
-    LoginRuntime(): state(std::make_shared<AuthState>()), token_session_port(std::make_shared<TokenSessionPort>(state)), login_usecase(std::make_unique<InMemoryUserPort>(state), std::make_unique<SharedTokenSessionPort>(token_session_port), std::make_unique<FileAuthEventLogPort>()), logout_usecase(std::make_unique<SharedLogoutSessionPort>(token_session_port), std::make_unique<FileAuthEventLogPort>()), login_controller(login_usecase, exception_handler), logout_controller(logout_usecase, exception_handler) {}
+    LoginRuntime():
+        state(std::make_shared<AuthState>()),
+        token_session_port(std::make_shared<TokenSessionPort>(state)),
+        login_usecase(std::make_unique<InMemoryUserPort>(state), std::make_unique<SharedTokenSessionPort>(token_session_port), std::make_unique<FileAuthEventLogPort>()),
+        logout_usecase(std::make_unique<SharedLogoutSessionPort>(token_session_port), std::make_unique<FileAuthEventLogPort>()),
+        get_balance_usecase(std::make_unique<SharedBalanceSessionPort>(token_session_port), std::make_unique<InMemoryBalanceAccountPort>(state)),
+        login_controller(login_usecase, exception_handler),
+        logout_controller(logout_usecase, exception_handler),
+        balance_controller(get_balance_usecase, exception_handler) {}
     void capture_login_attempt(const httplib::Request& req) {
         try { const auto json = nlohmann::json::parse(req.body); token_session_port->set_login_attempt(json.value("user", ""), json.value("pin", "")); } catch (const std::exception&) {}
     }
-    std::shared_ptr<AuthState> state; std::shared_ptr<TokenSessionPort> token_session_port; usecase::LoginUsecase login_usecase; usecase::LogoutUsecase logout_usecase; adapters::http::ExceptionHandler exception_handler; adapters::http::LoginController login_controller; adapters::http::LogoutController logout_controller;
+    std::shared_ptr<AuthState> state; std::shared_ptr<TokenSessionPort> token_session_port; usecase::LoginUsecase login_usecase; usecase::LogoutUsecase logout_usecase; usecase::GetBalanceUsecase get_balance_usecase; adapters::http::ExceptionHandler exception_handler; adapters::http::LoginController login_controller; adapters::http::LogoutController logout_controller; adapters::http::BalanceController balance_controller;
 };
 }
 static void handle_error(const httplib::Request&, httplib::Response& res) { if (res.body.empty()) { res.set_content(R"({"error": "Not Found"})", "application/json"); } }
@@ -116,5 +152,6 @@ void configure_server(httplib::Server& server) {
     auto login_runtime = std::make_shared<LoginRuntime>();
     server.Post("/api/v1/login", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->capture_login_attempt(req); login_runtime->login_controller.handle_login(req, res); });
     server.Post("/api/v1/logout", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->logout_controller.handle_logout(req, res); });
+    server.Get("/api/v1/balance", [login_runtime](const httplib::Request& req, httplib::Response& res) { login_runtime->balance_controller.handle_balance(req, res); });
     server.set_error_handler(handle_error);
 }

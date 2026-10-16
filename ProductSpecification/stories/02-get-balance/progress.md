@@ -16,5 +16,5 @@
   - Check 2 (exceptions): http — `InvalidCredentialsException` is thrown by the balance usecase, but no inbound balance HTTP handler currently maps it to the required 401 response, so add `red-adapter http` / `green-adapter http`.
   - Check 3 (response shape): http — `/api/v1/balance` does not yet return the expected JSON body with the authenticated user's balance, so add `red-adapter http` / `green-adapter http`.
 - [x] red-adapter http
-- [~] green-adapter http
-- [ ] green-acceptance
+- [x] green-adapter http
+- [x] green-acceptance
