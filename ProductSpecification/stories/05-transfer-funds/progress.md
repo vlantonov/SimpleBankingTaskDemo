@@ -12,6 +12,10 @@
 - [x] red-acceptance
 - [x] design
 - [x] red-usecase
-- [~] green-usecase
+- [x] green-usecase
+- [~] red-usecase (coverage: transfer rejects missing active session)
+- [ ] green-usecase (coverage: transfer rejects missing active session)
+- [ ] red-usecase (coverage: transfer rejects unknown destination account)
+- [ ] green-usecase (coverage: transfer rejects unknown destination account)
 - [ ] adapters-discovery
 - [ ] green-acceptance
