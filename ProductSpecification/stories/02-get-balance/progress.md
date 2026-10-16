@@ -10,6 +10,6 @@
 - [x] red-acceptance: get balance for an authenticated user returns the current balance
 - [x] design
 - [x] red-usecase
-- [~] green-usecase
-- [ ] adapters-discovery
+- [x] green-usecase
+- [~] adapters-discovery
 - [ ] green-acceptance
