@@ -13,6 +13,7 @@ add_executable(adapter_http_tests
     tests/auth/logout_controller_test.cpp
     tests/balance/balance_controller_test.cpp
     tests/deposit/deposit_controller_test.cpp
+    tests/withdraw/withdraw_controller_test.cpp
 )
 target_include_directories(adapter_http_tests PRIVATE tests)
 target_link_libraries(adapter_http_tests PRIVATE adapter_http GTest::gtest_main GTest::gmock)
