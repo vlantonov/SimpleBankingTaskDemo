@@ -8,7 +8,7 @@
 
 ## Backend
 - [x] red-acceptance: get balance for an authenticated user returns the current balance
-- [~] design
+- [x] design
 - [ ] red-usecase
 - [ ] green-usecase
 - [ ] adapters-discovery
