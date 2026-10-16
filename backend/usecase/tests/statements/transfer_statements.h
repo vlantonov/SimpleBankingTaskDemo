@@ -1,8 +1,10 @@
 #pragma once
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
 #include <optional>
 #include <string>
+#include "domain/domain_exception.h"
 #include "domain/transfer/transfer_request.h"
 #include "usecase/transfer/transfer_usecase.h"
 
@@ -23,6 +25,13 @@ public:
         if (token == kValidTransferToken) {
             return kSourceUsername;
         }
+        return std::nullopt;
+    }
+};
+
+class RejectingSessionPortForTransferStatements final : public usecase::ITransferSessionPort {
+public:
+    std::optional<std::string> find_username_by_token(const std::string&) const override {
         return std::nullopt;
     }
 };
@@ -61,16 +70,29 @@ private:
 
 class TransferStatements {
 public:
+    void assert_transfer_request_without_an_active_session_is_rejected() {
+        usecase::TransferUsecase usecase(
+            std::make_unique<transfer_statements_detail::RejectingSessionPortForTransferStatements>(),
+            build_account_port());
+
+        EXPECT_THAT([&]() {
+            usecase.execute(domain::TransferRequest{"missing-token", transfer_statements_detail::kDestinationUsername, 25.0});
+        }, testing::ThrowsMessage<domain::InvalidCredentialsException>(testing::Eq("Authentication error")));
+    }
+
     void when_authenticated_user_transfers_funds_to_another_existing_user() {
         actual_response_ = build_usecase().execute(build_transfer_request());
     }
 
     void assert_transfer_updates_both_account_balances() const {
-        ASSERT_TRUE(actual_response_.has_value());
-        EXPECT_EQ(actual_response_.value(), expected_transfer_response());
+        ASSERT_EQ(actual_response_, std::optional<usecase::TransferResponse>{expected_transfer_response()});
     }
 
 private:
+    static std::unique_ptr<usecase::ITransferAccountPort> build_account_port() {
+        return std::make_unique<transfer_statements_detail::TransferAccountPortForTransferStatements>();
+    }
+
     static domain::TransferRequest build_transfer_request() {
         return domain::TransferRequest{
             transfer_statements_detail::kValidTransferToken,
@@ -82,7 +104,7 @@ private:
     static usecase::TransferUsecase build_usecase() {
         return usecase::TransferUsecase(
             std::make_unique<transfer_statements_detail::ActiveSessionPortForTransferStatements>(),
-            std::make_unique<transfer_statements_detail::TransferAccountPortForTransferStatements>());
+            build_account_port());
     }
 
     static usecase::TransferResponse expected_transfer_response() {
