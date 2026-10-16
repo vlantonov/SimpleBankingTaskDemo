@@ -1,5 +1,6 @@
 add_executable(acceptance_tests
     tests/backend/auth/auth_acceptance_test.cpp
+    tests/backend/balance/balance_acceptance_test.cpp
 )
 
 target_include_directories(acceptance_tests PRIVATE
